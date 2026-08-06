@@ -1,0 +1,1818 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>鱼小熊 - 手工原味豆腐</title>
+    <!-- 外部资源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#C42021",
+              secondary: "#FFF0EB",
+              accent: "#D4AF37",
+              neutral: "#FFFBF8",
+              dark: "#3A1212",
+            },
+            fontFamily: {
+              sans: ["Noto Sans SC", "system-ui", "sans-serif"],
+              serif: ["Noto Serif SC", "Georgia", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .text-shadow {
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .hover-float {
+          transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+            box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .hover-float:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.15);
+        }
+        .texture-bg {
+          background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C42021' fill-opacity='0.03'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .border-gradient {
+          position: relative;
+          border-radius: inherit;
+          z-index: 0;
+        }
+        .border-gradient::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border: 1px solid transparent;
+          border-radius: inherit;
+          background: linear-gradient(135deg, #c42021, #d4af37) border-box;
+          -webkit-mask: linear-gradient(#fff 0 0) padding-box,
+            linear-gradient(#fff 0 0);
+          -webkit-mask-composite: destination-out;
+          mask-composite: exclude;
+          z-index: -1;
+        }
+        .elegant-shadow {
+          box-shadow: 0 10px 50px -12px rgba(0, 0, 0, 0.08);
+        }
+        /* 初始隐藏状态 */
+        .scroll-reveal {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        /* 显示状态 */
+        .scroll-reveal.active {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+
+    <style>
+      /* 平滑滚动 */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* 豆腐纹理效果 */
+      .tofu-texture {
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.1) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+
+      /* 滚动条美化 */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #c42021;
+        border-radius: 3px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #3a1212;
+      }
+
+      /* 图片悬停放大效果 */
+      .img-zoom {
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      .img-container:hover .img-zoom {
+        transform: scale(1.05);
+      }
+
+      /* 导航链接下划线动画 */
+      .nav-link {
+        position: relative;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #c42021;
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      /* 其他动画 */
+      @keyframes pulse-soft {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+      }
+
+      .pulse-gentle {
+        animation: pulse-soft 4s infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      @keyframes shimmer {
+        0%,
+        100% {
+          background-position: -200% 0;
+        }
+        50% {
+          background-position: 200% 0;
+        }
+      }
+
+      .shimmer-effect {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .shimmer-effect::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        background-size: 200% 100%;
+        animation: shimmer 3s infinite;
+        pointer-events: none;
+      }
+
+      /* 修复图标hover颜色问题 */
+      .feature-icon-container {
+        transition: all 0.3s ease;
+      }
+
+      .feature-icon-container i {
+        transition: color 0.3s ease;
+      }
+
+      .feature-icon-container:hover {
+        background-color: #c42021 !important;
+      }
+
+      .feature-icon-container:hover i {
+        color: white !important;
+      }
+
+      /* 确保所有产品详情卡片都有统一的圆角 */
+      .product-detail > div {
+        border-radius: 1rem !important;
+        overflow: hidden;
+      }
+
+      .product-detail .img-container {
+        border-radius: 1rem 1rem 0 0 !important;
+        overflow: hidden;
+      }
+
+      /* 标签样式统一 */
+      .tab-item {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+    </style>
+  </head>
+
+  <body class="bg-neutral texture-bg text-gray-800 font-sans">
+    <!-- 导航栏 -->
+    <header
+      id="navbar"
+      class="fixed w-full z-50 transition-all duration-500 bg-white/95 backdrop-blur-sm shadow-sm"
+    >
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <!-- 品牌Logo -->
+          <a href="#" class="flex items-center space-x-2 group">
+            <div
+              class="w-10 h-10 rounded-full bg-primary flex items-center justify-center transition-transform duration-300 group-hover:rotate-12"
+            >
+              <i class="fa fa-leaf text-white text-xl"></i>
+            </div>
+            <span class="text-xl font-bold text-primary">鱼小熊豆腐坊</span>
+          </a>
+
+          <!-- 桌面导航 -->
+          <nav class="hidden md:flex items-center space-x-8">
+            <a
+              href="#home"
+              class="nav-link font-medium hover:text-primary transition-colors"
+              >首页</a
+            >
+            <a
+              href="#products"
+              class="nav-link font-medium hover:text-primary transition-colors"
+              >豆腐系列</a
+            >
+            <a
+              href="#craft"
+              class="nav-link font-medium hover:text-primary transition-colors"
+              >制作工艺</a
+            >
+            <a
+              href="#features"
+              class="nav-link font-medium hover:text-primary transition-colors"
+              >产品特点</a
+            >
+            <a
+              href="#uses"
+              class="nav-link font-medium hover:text-primary transition-colors"
+              >食用方法</a
+            >
+            <a
+              href="#contact"
+              class="nav-link font-medium hover:text-primary transition-colors"
+              >联系我们</a
+            >
+          </nav>
+
+          <!-- 微信快捷按钮和移动端菜单 -->
+          <div class="flex items-center space-x-4">
+            <a
+              href="#contact"
+              class="hidden sm:flex items-center space-x-1 text-primary hover:text-dark transition-colors group"
+            >
+              <i
+                class="fa fa-weixin text-xl group-hover:scale-110 transition-transform"
+              ></i>
+              <span>微信订购</span>
+            </a>
+
+            <button
+              id="menu-toggle"
+              class="md:hidden p-2 hover:text-primary transition-colors"
+            >
+              <i class="fa fa-bars text-xl"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 移动端导航菜单 -->
+      <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+        <div class="container mx-auto px-4 py-3 space-y-3">
+          <a
+            href="#home"
+            class="block py-2 font-medium hover:text-primary transition-colors"
+            >首页</a
+          >
+          <a
+            href="#products"
+            class="block py-2 font-medium hover:text-primary transition-colors"
+            >豆腐系列</a
+          >
+          <a
+            href="#craft"
+            class="block py-2 font-medium hover:text-primary transition-colors"
+            >制作工艺</a
+          >
+          <a
+            href="#features"
+            class="block py-2 font-medium hover:text-primary transition-colors"
+            >产品特点</a
+          >
+          <a
+            href="#uses"
+            class="block py-2 font-medium hover:text-primary transition-colors"
+            >食用方法</a
+          >
+          <a
+            href="#contact"
+            class="block py-2 font-medium hover:text-primary transition-colors"
+            >联系我们</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- 英雄区域 -->
+      <section
+        id="home"
+        class="pt-20 md:pt-0 min-h-screen flex items-center relative overflow-hidden"
+      >
+        <div class="absolute inset-0 z-0">
+          <img
+            src="https://picsum.photos/id/139/1920/1080"
+            alt="手工豆腐背景"
+            class="w-full h-full object-cover opacity-10"
+          />
+        </div>
+
+        <!-- 装饰元素 -->
+        <div
+          class="absolute top-1/4 -right-10 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"
+        ></div>
+        <div
+          class="absolute bottom-1/3 -left-10 w-80 h-80 bg-accent/10 rounded-full filter blur-3xl"
+        ></div>
+
+        <div
+          class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10"
+        >
+          <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6 scroll-reveal" data-delay="0.1s">
+              <span
+                class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
+                >传统手艺 · 自然本味</span
+              >
+              <h1
+                class="text-[clamp(2.2rem,5vw,3.5rem)] font-bold leading-tight text-dark"
+              >
+                老手艺做的<br />
+                <span class="text-primary">原香豆腐</span>
+              </h1>
+              <p class="text-lg md:text-xl text-gray-600 max-w-lg">
+                遵循古法，手工制作，只用黄豆和水，无任何添加。从选豆到成型，每一步都凝聚匠心，只为那一口纯粹的豆香。
+              </p>
+
+              <div class="pt-4">
+                <a
+                  href="#contact"
+                  class="inline-flex items-center px-8 py-3 bg-primary hover:bg-dark text-white font-medium rounded-full transition-all shadow-lg hover:shadow-xl pulse-gentle shimmer-effect"
+                >
+                  <i class="fa fa-shopping-basket mr-2"></i>
+                  微信订购
+                </a>
+              </div>
+
+              <!-- 核心特点 -->
+              <div class="pt-8 grid grid-cols-2 gap-4">
+                <div
+                  class="bg-secondary p-3 rounded-lg flex items-center space-x-2 hover:shadow-md transition-shadow"
+                >
+                  <i class="fa fa-check-circle text-primary"></i>
+                  <span>100%非转基因黄豆</span>
+                </div>
+                <div
+                  class="bg-secondary p-3 rounded-lg flex items-center space-x-2 hover:shadow-md transition-shadow"
+                >
+                  <i class="fa fa-check-circle text-primary"></i>
+                  <span>传统手工制作</span>
+                </div>
+                <div
+                  class="bg-secondary p-3 rounded-lg flex items-center space-x-2 hover:shadow-md transition-shadow"
+                >
+                  <i class="fa fa-check-circle text-primary"></i>
+                  <span>零添加防腐剂</span>
+                </div>
+                <div
+                  class="bg-secondary p-3 rounded-lg flex items-center space-x-2 hover:shadow-md transition-shadow"
+                >
+                  <i class="fa fa-check-circle text-primary"></i>
+                  <span>当日新鲜制作</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative scroll-reveal" data-delay="0.3s">
+              <div
+                class="relative z-10 rounded-2xl overflow-hidden shadow-2xl transform hover:rotate-0 transition-transform duration-700 -rotate-1 elegant-shadow"
+              >
+                <img
+                  src="https://picsum.photos/id/292/800/1000"
+                  alt="手工白豆腐"
+                  class="w-full h-auto"
+                />
+              </div>
+              <div
+                class="absolute top-1/4 -right-6 w-36 h-36 bg-accent/15 rounded-full filter blur-2xl"
+              ></div>
+              <div
+                class="absolute bottom-1/3 -left-8 w-44 h-44 bg-primary/15 rounded-full filter blur-3xl"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 向下滚动指示 -->
+        <div
+          class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-primary animate-bounce cursor-pointer"
+          onclick="window.scrollTo({top: document.getElementById('products').offsetTop - 80, behavior: 'smooth'})"
+        >
+          <i class="fa fa-angle-down text-2xl"></i>
+        </div>
+      </section>
+
+      <!-- 豆腐系列产品 -->
+      <section id="products" class="py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16 scroll-reveal">
+            <span
+              class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4"
+              >匠心之作</span
+            >
+            <h2
+              class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-4 text-dark"
+            >
+              我们的豆腐系列
+            </h2>
+            <p class="text-gray-600 text-lg">
+              坚持传统工艺，呈现多种形态的原味豆腐，满足不同烹饪需求
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 产品1：水豆腐 -->
+            <div
+              class="bg-secondary rounded-xl overflow-hidden shadow-md hover-float scroll-reveal elegant-shadow"
+              data-delay="0.1s"
+            >
+              <div class="h-64 overflow-hidden img-container">
+                <img
+                  src="https://picsum.photos/id/139/600/600"
+                  alt="水豆腐"
+                  class="w-full h-full object-cover img-zoom"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-3 text-dark">嫩滑水豆腐</h3>
+                <p class="text-gray-600 mb-4">
+                  含水量高，质地细腻滑嫩，豆香浓郁。适合凉拌、做汤或作为婴儿辅食。
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <span class="flex items-center mr-4"
+                    ><i class="fa fa-tint text-primary mr-1"></i> 高含水量</span
+                  >
+                  <span class="flex items-center"
+                    ><i class="fa fa-clock-o text-primary mr-1"></i>
+                    冷藏3天</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- 产品2：白豆腐 -->
+            <div
+              class="bg-secondary rounded-xl overflow-hidden shadow-md hover-float scroll-reveal elegant-shadow"
+              data-delay="0.2s"
+            >
+              <div class="h-64 overflow-hidden img-container">
+                <img
+                  src="https://picsum.photos/id/292/600/600"
+                  alt="白豆腐"
+                  class="w-full h-full object-cover img-zoom"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-3 text-dark">传统白豆腐</h3>
+                <p class="text-gray-600 mb-4">
+                  紧实有弹性，豆香纯正。适合煎、炸、炒、煮，是家常菜的理想选择。
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <span class="flex items-center mr-4"
+                    ><i class="fa fa-cube text-primary mr-1"></i> 中等硬度</span
+                  >
+                  <span class="flex items-center"
+                    ><i class="fa fa-clock-o text-primary mr-1"></i>
+                    冷藏5天</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- 产品3：豆腐干 -->
+            <div
+              class="bg-secondary rounded-xl overflow-hidden shadow-md hover-float scroll-reveal elegant-shadow"
+              data-delay="0.3s"
+            >
+              <div class="h-64 overflow-hidden img-container">
+                <img
+                  src="https://picsum.photos/id/488/600/600"
+                  alt="豆腐干"
+                  class="w-full h-full object-cover img-zoom"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-3 text-dark">原味豆腐干</h3>
+                <p class="text-gray-600 mb-4">
+                  压制紧实，含水量低，富有嚼劲。可直接食用，或用于炒菜、凉拌、卤制。
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <span class="flex items-center mr-4"
+                    ><i class="fa fa-compress text-primary mr-1"></i>
+                    高紧实度</span
+                  >
+                  <span class="flex items-center"
+                    ><i class="fa fa-clock-o text-primary mr-1"></i>
+                    冷藏7天</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- 产品4：豆腐皮 -->
+            <div
+              class="bg-secondary rounded-xl overflow-hidden shadow-md hover-float scroll-reveal elegant-shadow"
+              data-delay="0.4s"
+            >
+              <div class="h-64 overflow-hidden img-container">
+                <img
+                  src="https://picsum.photos/id/312/600/600"
+                  alt="豆腐皮"
+                  class="w-full h-full object-cover img-zoom"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-3 text-dark">手工豆腐皮</h3>
+                <p class="text-gray-600 mb-4">
+                  豆浆表面自然凝结而成，薄如蝉翼，营养丰富。适合凉拌、煲汤或涮火锅。
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <span class="flex items-center mr-4"
+                    ><i class="fa fa-feather text-primary mr-1"></i>
+                    轻薄柔韧</span
+                  >
+                  <span class="flex items-center"
+                    ><i class="fa fa-clock-o text-primary mr-1"></i>
+                    冷藏10天</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- 产品5：豆腐泡 -->
+            <div
+              class="bg-secondary rounded-xl overflow-hidden shadow-md hover-float scroll-reveal elegant-shadow"
+              data-delay="0.5s"
+            >
+              <div class="h-64 overflow-hidden img-container">
+                <img
+                  src="https://picsum.photos/id/493/600/600"
+                  alt="豆腐泡"
+                  class="w-full h-full object-cover img-zoom"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-3 text-dark">油炸豆腐泡</h3>
+                <p class="text-gray-600 mb-4">
+                  外酥内软，多孔结构，吸味性强。适合火锅、红烧或填充馅料制作美味佳肴。
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <span class="flex items-center mr-4"
+                    ><i class="fa fa-circle-o text-primary mr-1"></i>
+                    多孔结构</span
+                  >
+                  <span class="flex items-center"
+                    ><i class="fa fa-clock-o text-primary mr-1"></i>
+                    冷藏5天</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- 产品6：冻豆腐 -->
+            <div
+              class="bg-secondary rounded-xl overflow-hidden shadow-md hover-float scroll-reveal elegant-shadow"
+              data-delay="0.6s"
+            >
+              <div class="h-64 overflow-hidden img-container">
+                <img
+                  src="https://picsum.photos/id/225/600/600"
+                  alt="冻豆腐"
+                  class="w-full h-full object-cover img-zoom"
+                />
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-semibold mb-3 text-dark">天然冻豆腐</h3>
+                <p class="text-gray-600 mb-4">
+                  经自然冷冻形成独特蜂窝结构，口感有嚼劲，吸饱汤汁后味道鲜美，适合火锅炖煮。
+                </p>
+                <div class="flex items-center text-sm text-gray-500">
+                  <span class="flex items-center mr-4"
+                    ><i class="fa fa-snowflake-o text-primary mr-1"></i>
+                    自然冷冻</span
+                  >
+                  <span class="flex items-center"
+                    ><i class="fa fa-clock-o text-primary mr-1"></i>
+                    冷冻30天</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 季节性特色产品 -->
+          <div class="mt-12 text-center scroll-reveal" data-delay="0.7s">
+            <p class="text-gray-600 mb-6">季节性特色产品</p>
+
+            <!-- 产品轮播导航 - 已统一所有标签基础样式 -->
+            <div
+              class="inline-flex bg-secondary rounded-full p-1 mb-8 flex-wrap justify-center product-tabs"
+            >
+              <!-- 激活状态标签 -->
+              <span
+                class="tab-item px-4 py-2 rounded-full bg-white shadow-sm text-primary font-medium transition-all"
+                data-index="0"
+                >香椿豆腐卷</span
+              >
+              <!-- 未激活状态标签（与第一个保持相同基础样式） -->
+              <span
+                class="tab-item px-4 py-2 rounded-full text-gray-600 hover:bg-white/50 transition-all"
+                data-index="1"
+                >麻婆豆腐预制包</span
+              >
+              <span
+                class="tab-item px-4 py-2 rounded-full text-gray-600 hover:bg-white/50 transition-all"
+                data-index="2"
+                >豆腐素丸子</span
+              >
+              <span
+                class="tab-item px-4 py-2 rounded-full text-gray-600 hover:bg-white/50 transition-all"
+                data-index="3"
+                >豆干酱菜</span
+              >
+            </div>
+
+            <!-- 产品详情轮播区 -->
+            <div class="product-details-container max-w-2xl mx-auto">
+              <!-- 香椿豆腐卷 -->
+              <div class="product-detail active" data-index="0">
+                <div
+                  class="bg-white rounded-xl overflow-hidden shadow-md elegant-shadow"
+                >
+                  <div class="h-64 overflow-hidden img-container">
+                    <img
+                      src="https://picsum.photos/id/488/800/500"
+                      alt="香椿豆腐卷"
+                      class="w-full h-full object-cover img-zoom"
+                    />
+                  </div>
+                  <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-dark">
+                      香椿豆腐卷
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                      春季限定产品，新鲜香椿与嫩滑嫩豆腐完美结合，外酥里嫩，香气扑鼻。采用传统工艺制作，不含防腐剂，真空包装健康美味的春季佳肴。
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      <span
+                        class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                        >春季限定</span
+                      >
+                      <span
+                        class="px-3 py-1 bg-secondary text-dark rounded-full text-sm"
+                        >即食</span
+                      >
+                      <span
+                        class="px-3 py-1 bg-secondary text-dark rounded-full text-sm"
+                        >冷藏3天</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 麻婆豆腐预制包 -->
+              <div class="product-detail hidden" data-index="1">
+                <div
+                  class="bg-white rounded-xl overflow-hidden shadow-md elegant-shadow"
+                >
+                  <div class="h-64 overflow-hidden img-container">
+                    <img
+                      src="https://picsum.photos/id/292/800/500"
+                      alt="麻婆豆腐预制包"
+                      class="w-full h-full object-cover img-zoom"
+                    />
+                  </div>
+                  <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-dark">
+                      麻婆豆腐预制包
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                      内含本坊特制豆腐和秘制酱料，只需简单加热即可享用正宗川味麻婆豆腐。麻辣鲜香，口感丰富，是快捷又美味的家常菜选择。
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      <span
+                        class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                        >四季供应</span
+                      >
+                      <span
+                        class="px-3 py-1 bg-secondary text-dark rounded-full text-sm"
+                        >简易烹饪</span
+                      >
+                      <span
+                        class="px-3 py-1 bg-secondary text-dark rounded-full text-sm"
+                        >冷藏7天</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 豆腐素丸子 -->
+              <div class="product-detail hidden" data-index="2">
+                <div
+                  class="bg-white rounded-xl overflow-hidden shadow-md elegant-shadow"
+                >
+                  <div class="h-64 overflow-hidden img-container">
+                    <img
+                      src="https://picsum.photos/id/312/800/500"
+                      alt="豆腐素丸子"
+                      class="w-full h-full object-cover img-zoom"
+                    />
+                  </div>
+                  <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-dark">
+                      豆腐素丸子
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                      以纯豆腐为原料制作的素丸子，外酥内软，可煎可炸可煮汤。富含植物蛋白，低脂健康，是素食者和健康饮食者的理想选择。
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      <span
+                        class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                        >秋冬热销</span
+                      >
+                      <span
+                        class="px-3 py-1 bg-secondary text-dark rounded-full text-sm"
+                        >多吃法</span
+                      >
+                      <span
+                        class="px-3 py-1 bg-secondary text-dark rounded-full text-sm"
+                        >冷冻30天</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 豆干酱菜 -->
+              <div class="product-detail hidden" data-index="3">
+                <div
+                  class="bg-white rounded-xl overflow-hidden shadow-md elegant-shadow"
+                >
+                  <div class="h-64 overflow-hidden img-container">
+                    <img
+                      src="https://picsum.photos/id/139/800/500"
+                      alt="豆干酱菜"
+                      class="w-full h-full object-cover img-zoom"
+                    />
+                  </div>
+                  <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-dark">
+                      豆干酱菜
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                      精选豆腐干与多种香辛料腌制而成，咸淡适中，香气浓郁。既可直接食用，也可作为配菜点缀，是佐餐佳品。
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      <span
+                        class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                        >全年供应</span
+                      >
+                      <span
+                        class="px-3 py-1 bg-secondary text-dark rounded-full text-sm"
+                        >佐餐</span
+                      >
+                      <span
+                        class="px-3 py-1 bg-secondary text-dark rounded-full text-sm"
+                        >常温保存30天</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 制作工艺 -->
+      <section id="craft" class="py-20 bg-secondary tofu-texture">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16 scroll-reveal">
+            <span
+              class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4"
+              >匠心工艺</span
+            >
+            <h2
+              class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-4 text-dark"
+            >
+              古法制作工艺
+            </h2>
+            <p class="text-gray-600 text-lg">
+              坚守传统六步工艺，每一步都凝聚匠心，只为保留豆腐最原始的美味
+            </p>
+          </div>
+
+          <!-- 工艺步骤时间线 -->
+          <div class="relative">
+            <!-- 中间连接线 -->
+            <div
+              class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-primary/20 -translate-y-1/2 z-0"
+            ></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-6 gap-6 relative z-10">
+              <!-- 步骤1 -->
+              <div
+                class="bg-white rounded-xl p-5 text-center hover-float scroll-reveal elegant-shadow"
+                data-delay="0.1s"
+              >
+                <div
+                  class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold"
+                >
+                  1
+                </div>
+                <h3 class="font-semibold mb-2">精选黄豆</h3>
+                <p class="text-gray-600 text-sm">
+                  严选饱满非转基因黄豆，人工挑拣去除杂质
+                </p>
+              </div>
+
+              <!-- 步骤2 -->
+              <div
+                class="bg-white rounded-xl p-5 text-center hover-float scroll-reveal elegant-shadow"
+                data-delay="0.2s"
+              >
+                <div
+                  class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold"
+                >
+                  2
+                </div>
+                <h3 class="font-semibold mb-2">清水浸泡</h3>
+                <p class="text-gray-600 text-sm">
+                  山泉水浸泡8小时，让黄豆充分吸水膨胀
+                </p>
+              </div>
+
+              <!-- 步骤3 -->
+              <div
+                class="bg-white rounded-xl p-5 text-center hover-float scroll-reveal elegant-shadow"
+                data-delay="0.3s"
+              >
+                <div
+                  class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold"
+                >
+                  3
+                </div>
+                <h3 class="font-semibold mb-2">石磨研磨</h3>
+                <p class="text-gray-600 text-sm">
+                  传统石磨低速研磨，保留完整营养与豆香
+                </p>
+              </div>
+
+              <!-- 步骤4 -->
+              <div
+                class="bg-white rounded-xl p-5 text-center hover-float scroll-reveal elegant-shadow"
+                data-delay="0.4s"
+              >
+                <div
+                  class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold"
+                >
+                  4
+                </div>
+                <h3 class="font-semibold mb-2">熬煮豆浆</h3>
+                <p class="text-gray-600 text-sm">
+                  慢火熬煮，去除豆腥，保留纯正豆香
+                </p>
+              </div>
+
+              <!-- 步骤5 -->
+              <div
+                class="bg-white rounded-xl p-5 text-center hover-float scroll-reveal elegant-shadow"
+                data-delay="0.5s"
+              >
+                <div
+                  class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold"
+                >
+                  5
+                </div>
+                <h3 class="font-semibold mb-2">手工点制</h3>
+                <p class="text-gray-600 text-sm">
+                  盐卤点制，把握最佳温度与时间，凝聚嫩滑口感
+                </p>
+              </div>
+
+              <!-- 步骤6 -->
+              <div
+                class="bg-white rounded-xl p-5 text-center hover-float scroll-reveal elegant-shadow"
+                data-delay="0.6s"
+              >
+                <div
+                  class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold"
+                >
+                  6
+                </div>
+                <h3 class="font-semibold mb-2">压制成型</h3>
+                <p class="text-gray-600 text-sm">
+                  根据不同豆腐种类，控制压制力度与时间
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 工艺展示图 -->
+          <div
+            class="mt-16 grid md:grid-cols-2 gap-8 items-center scroll-reveal"
+            data-delay="0.7s"
+          >
+            <div class="relative group">
+              <img
+                src="https://picsum.photos/id/306/800/600"
+                alt="手工制作豆腐"
+                class="w-full h-auto rounded-xl shadow-lg elegant-shadow"
+              />
+              <div
+                class="absolute -bottom-4 -right-4 w-32 h-32 border-4 border-primary rounded-xl -z-10 group-hover:border-accent transition-colors duration-500"
+              ></div>
+            </div>
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-dark">坚守传统，只为本味</h3>
+              <p class="text-gray-600">
+                我们坚持传统手工制作，拒绝工业化生产。每一块豆腐都由经验丰富的老师傅亲手制作，从选豆到成品需经过12小时以上的匠心打造。
+              </p>
+              <p class="text-gray-600">
+                不添加任何防腐剂、增白剂和稳定剂，只用黄豆和天然盐卤，让您品尝到最纯粹的豆腐原味，找回儿时的味道记忆。
+              </p>
+              <div class="pt-2">
+                <a
+                  href="#contact"
+                  class="inline-flex items-center text-primary font-medium hover:underline group"
+                >
+                  了解更多工艺细节
+                  <i
+                    class="fa fa-long-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"
+                  ></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 产品特点 -->
+      <section id="features" class="py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16 scroll-reveal">
+            <span
+              class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4"
+              >为何选择我们</span
+            >
+            <h2
+              class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-4 text-dark"
+            >
+              手工豆腐的独特之处
+            </h2>
+            <p class="text-gray-600 text-lg">
+              与普通豆腐相比，我们的手工豆腐有着无法替代的优势
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8 scroll-reveal" data-delay="0.1s">
+              <!-- 特点1 -->
+              <div class="flex group">
+                <div
+                  class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mr-5 flex-shrink-0 feature-icon-container"
+                >
+                  <i class="fa fa-leaf text-primary text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold mb-2 text-dark">
+                    纯天然原料
+                  </h3>
+                  <p class="text-gray-600">
+                    只选用非转基因黄豆和天然山泉水，不添加任何防腐剂、色素和添加剂，纯净无负担。
+                  </p>
+                </div>
+              </div>
+
+              <!-- 特点2 -->
+              <div class="flex group">
+                <div
+                  class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mr-5 flex-shrink-0 feature-icon-container"
+                >
+                  <i class="fa fa-fire text-primary text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold mb-2 text-dark">
+                    传统石磨工艺
+                  </h3>
+                  <p class="text-gray-600">
+                    石磨低速研磨能更好地保留黄豆中的营养成分，避免高温破坏蛋白质，豆香更浓郁。
+                  </p>
+                </div>
+              </div>
+
+              <!-- 特点3 -->
+              <div class="flex group">
+                <div
+                  class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mr-5 flex-shrink-0 feature-icon-container"
+                >
+                  <i class="fa fa-clock-o text-primary text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold mb-2 text-dark">
+                    当日新鲜制作
+                  </h3>
+                  <p class="text-gray-600">
+                    每日凌晨开始制作，当天送达，保证您吃到的每一块豆腐都新鲜可口，锁住最佳风味。
+                  </p>
+                </div>
+              </div>
+
+              <!-- 特点4 -->
+              <div class="flex group">
+                <div
+                  class="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mr-5 flex-shrink-0 feature-icon-container"
+                >
+                  <i class="fa fa-heart text-primary text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold mb-2 text-dark">
+                    营养保留更完整
+                  </h3>
+                  <p class="text-gray-600">
+                    传统工艺制作的豆腐，蛋白质、钙质等营养成分保留更完整，更易于人体吸收利用。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 营养对比 -->
+            <div
+              class="bg-secondary rounded-2xl p-8 shadow-lg scroll-reveal border-gradient elegant-shadow"
+              data-delay="0.3s"
+            >
+              <h3 class="text-2xl font-bold mb-6 text-center text-dark">
+                营养成分对比
+              </h3>
+              <div class="h-80">
+                <canvas id="nutritionChart"></canvas>
+              </div>
+              <p class="text-center text-sm text-gray-500 mt-6">
+                数据来源：本坊手工豆腐与普通机制豆腐营养成分检测报告
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 食用方法 -->
+      <section id="uses" class="py-20 bg-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-16 scroll-reveal">
+            <span
+              class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4"
+              >多样吃法</span
+            >
+            <h2
+              class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold mb-4 text-dark"
+            >
+              丰富的食用场景
+            </h2>
+            <p class="text-gray-600 text-lg">
+              不同种类的豆腐适合不同的烹饪方式，发挥各自优势，呈现多样风味
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- 吃法1 -->
+            <div
+              class="group relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all scroll-reveal elegant-shadow"
+              data-delay="0.1s"
+            >
+              <img
+                src="https://picsum.photos/id/225/500/500"
+                alt="凉拌豆腐"
+                class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale(1.1)"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6"
+              >
+                <h3 class="text-xl font-semibold text-white mb-2">
+                  凉拌水豆腐
+                </h3>
+                <p class="text-white/80 text-sm">
+                  搭配葱花、酱油和香油，清爽可口，保留原汁原味
+                </p>
+              </div>
+            </div>
+
+            <!-- 吃法2 -->
+            <div
+              class="group relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all scroll-reveal elegant-shadow"
+              data-delay="0.2s"
+            >
+              <img
+                src="https://picsum.photos/id/488/500/500"
+                alt="红烧豆腐"
+                class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale(1.1)"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6"
+              >
+                <h3 class="text-xl font-semibold text-white mb-2">
+                  红烧白豆腐
+                </h3>
+                <p class="text-white/80 text-sm">
+                  酱香浓郁，口感软嫩，下饭神器，全家都爱吃
+                </p>
+              </div>
+            </div>
+
+            <!-- 吃法3 -->
+            <div
+              class="group relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all scroll-reveal elegant-shadow"
+              data-delay="0.3s"
+            >
+              <img
+                src="https://picsum.photos/id/493/500/500"
+                alt="豆腐汤"
+                class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale(1.1)"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6"
+              >
+                <h3 class="text-xl font-semibold text-white mb-2">
+                  豆腐鸡蛋汤
+                </h3>
+                <p class="text-white/80 text-sm">
+                  清淡营养，易于消化，适合老人儿童补充营养
+                </p>
+              </div>
+            </div>
+
+            <!-- 吃法4 -->
+            <div
+              class="group relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all scroll-reveal elegant-shadow"
+              data-delay="0.4s"
+            >
+              <img
+                src="https://picsum.photos/id/312/500/500"
+                alt="卤豆腐干"
+                class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale(1.1)"
+              />
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6"
+              >
+                <h3 class="text-xl font-semibold text-white mb-2">
+                  卤制豆腐干
+                </h3>
+                <p class="text-white/80 text-sm">
+                  香韧有嚼劲，可直接食用，也可炒菜、凉拌
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 适用人群 -->
+          <div
+            class="mt-16 bg-secondary rounded-2xl p-8 lg:p-12 scroll-reveal elegant-shadow"
+            data-delay="0.5s"
+          >
+            <h3 class="text-2xl font-bold text-center mb-10 text-dark">
+              适合各类人群
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div
+                class="bg-white p-6 rounded-xl text-center hover-float elegant-shadow"
+              >
+                <div
+                  class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <i class="fa fa-child text-primary text-2xl"></i>
+                </div>
+                <h4 class="font-semibold mb-2">成长中的儿童</h4>
+                <p class="text-gray-600 text-sm">
+                  提供优质蛋白质和钙质，促进骨骼发育
+                </p>
+              </div>
+
+              <div
+                class="bg-white p-6 rounded-xl text-center hover-float elegant-shadow"
+              >
+                <div
+                  class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <i class="fa fa-futbol-o text-primary text-2xl"></i>
+                </div>
+                <h4 class="font-semibold mb-2">健身爱好者</h4>
+                <p class="text-gray-600 text-sm">
+                  补充植物蛋白，助力肌肉修复与生长
+                </p>
+              </div>
+
+              <div
+                class="bg-white p-6 rounded-xl text-center hover-float elegant-shadow"
+              >
+                <div
+                  class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <i class="fa fa-female text-primary text-2xl"></i>
+                </div>
+                <h4 class="font-semibold mb-2">爱美女性</h4>
+                <p class="text-gray-600 text-sm">
+                  低热量高营养，有助于保持身材和皮肤健康
+                </p>
+              </div>
+
+              <div
+                class="bg-white p-6 rounded-xl text-center hover-float elegant-shadow"
+              >
+                <div
+                  class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
+                  <i class="fa fa-heartbeat text-primary text-2xl"></i>
+                </div>
+                <h4 class="font-semibold mb-2">中老年人群</h4>
+                <p class="text-gray-600 text-sm">
+                  易于消化，保护心血管，预防骨质疏松
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 联系订购区 -->
+      <section id="contact" class="py-20 bg-neutral relative overflow-hidden">
+        <div
+          class="absolute top-0 right-0 w-1/3 h-full bg-primary/5 -skew-x-12 transform origin-top-right"
+        ></div>
+
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6 scroll-reveal">
+              <span
+                class="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
+                >联系我们</span
+              >
+              <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-dark">
+                订购新鲜手工豆腐
+              </h2>
+              <p class="text-gray-600">
+                扫码添加微信，即可订购当日新鲜手工豆腐，支持送货上门。我们会定期分享豆腐的保存方法和美味做法。
+              </p>
+
+              <div class="space-y-4 pt-4">
+                <div class="flex items-start space-x-4">
+                  <div
+                    class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mt-1 flex-shrink-0"
+                  >
+                    <i class="fa fa-calendar-check-o text-primary"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-dark">配送时间</h4>
+                    <p class="text-gray-600">
+                      每日上午9点前下单，当天下午送达；9点后下单，次日送达
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                  <div
+                    class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mt-1 flex-shrink-0"
+                  >
+                    <i class="fa fa-map-marker text-primary"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-dark">配送范围</h4>
+                    <p class="text-gray-600">
+                      市区3公里内免费配送，超出范围需加收少量配送费
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                  <div
+                    class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mt-1 flex-shrink-0"
+                  >
+                    <i class="fa fa-gift text-primary"></i>
+                  </div>
+                  <div>
+                    <h4 class="font-semibold text-dark">新客福利</h4>
+                    <p class="text-gray-600">
+                      首次下单即送豆腐专用食谱一份，满30元减5元
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 微信二维码互动区 -->
+            <div
+              class="flex justify-center scroll-reveal animate-float"
+              data-delay="0.3s"
+            >
+              <div
+                class="bg-white p-8 rounded-2xl shadow-xl text-center max-w-xs w-full hover-float border-gradient elegant-shadow"
+              >
+                <div
+                  class="bg-gray-100 p-5 rounded-xl mb-5 relative overflow-hidden group"
+                >
+                  <img
+                    src="https://picsum.photos/id/237/300/300"
+                    alt="微信订购二维码"
+                    class="w-52 h-52 mx-auto transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div
+                    class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                  >
+                    <i class="fa fa-mobile text-6xl text-primary"></i>
+                  </div>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 text-dark">
+                  扫码添加微信
+                </h3>
+                <p class="text-gray-600 text-sm mb-5">
+                  回复【豆腐】即可立即订购
+                </p>
+
+                <!-- 互动按钮 -->
+                <button
+                  id="wechat-guide"
+                  class="w-full py-3 bg-primary hover:bg-dark text-white font-medium rounded-full transition-colors flex items-center justify-center"
+                >
+                  <i class="fa fa-info-circle mr-2"></i>
+                  查看订购流程
+                </button>
+
+                <!-- 隐藏的订购流程 -->
+                <div id="order-process" class="mt-5 hidden">
+                  <div
+                    class="bg-secondary p-4 rounded-lg text-left text-sm text-gray-600 space-y-2"
+                  >
+                    <p class="font-medium text-primary">订购流程：</p>
+                    <p>
+                      <span
+                        class="inline-block w-6 h-6 bg-primary text-white rounded-full text-center text-xs mr-2"
+                        >1</span
+                      >
+                      扫码添加微信好友
+                    </p>
+                    <p>
+                      <span
+                        class="inline-block w-6 h-6 bg-primary text-white rounded-full text-center text-xs mr-2"
+                        >2</span
+                      >
+                      告知所需豆腐种类和数量
+                    </p>
+                    <p>
+                      <span
+                        class="inline-block w-6 h-6 bg-primary text-white rounded-full text-center text-xs mr-2"
+                        >3</span
+                      >
+                      提供配送地址和联系方式
+                    </p>
+                    <p>
+                      <span
+                        class="inline-block w-6 h-6 bg-primary text-white rounded-full text-center text-xs mr-2"
+                        >4</span
+                      >
+                      确认订单并支付
+                    </p>
+                    <p>
+                      <span
+                        class="inline-block w-6 h-6 bg-primary text-white rounded-full text-center text-xs mr-2"
+                        >5</span
+                      >
+                      等待新鲜豆腐送达
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="scroll-reveal" data-delay="0.1s">
+            <div class="flex items-center space-x-2 mb-6">
+              <div
+                class="w-10 h-10 rounded-full bg-white flex items-center justify-center"
+              >
+                <i class="fa fa-leaf text-primary text-xl"></i>
+              </div>
+              <span class="text-xl font-bold">鱼小熊豆腐坊</span>
+            </div>
+            <p class="text-gray-300 mb-6">
+              传承传统工艺，专注手工豆腐，只为给您带来最纯正的豆香与健康。
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full bg-white/10 hover:bg-primary flex items-center justify-center transition-colors"
+              >
+                <i class="fa fa-weixin"></i>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full bg-white/10 hover:bg-primary flex items-center justify-center transition-colors"
+              >
+                <i class="fa fa-phone"></i>
+              </a>
+              <a
+                href="#"
+                class="w-10 h-10 rounded-full bg-white/10 hover:bg-primary flex items-center justify-center transition-colors"
+              >
+                <i class="fa fa-map-marker"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="scroll-reveal" data-delay="0.2s">
+            <h4 class="text-lg font-semibold mb-6">快速链接</h4>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  href="#home"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >首页</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#products"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >豆腐系列</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#craft"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >制作工艺</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#features"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >产品特点</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#uses"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >食用方法</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#contact"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >联系我们</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="scroll-reveal" data-delay="0.3s">
+            <h4 class="text-lg font-semibold mb-6">常见问题</h4>
+            <ul class="space-y-3">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >豆腐如何保存更久？</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >不同豆腐有何区别？</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >每天适宜食用量？</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >如何辨别优质豆腐？</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-300 hover:text-white transition-colors"
+                  >有哪些经典做法？</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="scroll-reveal" data-delay="0.4s">
+            <h4 class="text-lg font-semibold mb-6">联系方式</h4>
+            <ul class="space-y-3">
+              <li class="flex items-start space-x-3">
+                <i class="fa fa-map-marker mt-1 text-primary"></i>
+                <span class="text-gray-300"
+                  >青山区和平路123号 鱼小熊豆腐坊</span
+                >
+              </li>
+              <li class="flex items-center space-x-3">
+                <i class="fa fa-phone text-primary"></i>
+                <span class="text-gray-300">138-8888-9999</span>
+              </li>
+              <li class="flex items-center space-x-3">
+                <i class="fa fa-clock-o text-primary"></i>
+                <span class="text-gray-300">营业时间：6:00-18:00</span>
+              </li>
+              <li class="flex items-center space-x-3">
+                <i class="fa fa-truck text-primary"></i>
+                <span class="text-gray-300">配送时间：14:00-19:00</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-white/10 mt-12 pt-8 text-center text-gray-400 text-sm scroll-reveal"
+          data-delay="0.5s"
+        >
+          <p>© 2025 鱼小熊豆腐坊 版权所有 | 传统工艺 · 手工制作 · 天然健康</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+      // 滚动显示动画实现
+      document.addEventListener("DOMContentLoaded", function () {
+        // 初始化所有需要滚动显示的元素
+        const revealElements = document.querySelectorAll(".scroll-reveal");
+
+        // 配置观察器选项
+        const observerOptions = {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.1,
+        };
+
+        // 创建观察器实例
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // 获取延迟时间（如果有）
+              const delay = entry.target.getAttribute("data-delay") || 0;
+
+              // 添加延迟显示效果，创造层次感
+              setTimeout(() => {
+                entry.target.classList.add("active");
+              }, delay * 1000);
+
+              // 只观察一次
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        // 观察所有元素
+        revealElements.forEach((element) => {
+          observer.observe(element);
+        });
+
+        // 导航栏滚动效果
+        window.addEventListener("scroll", function () {
+          const navbar = document.getElementById("navbar");
+          if (window.scrollY > 50) {
+            navbar.classList.add("py-2", "shadow");
+            navbar.classList.remove("py-4");
+          } else {
+            navbar.classList.add("py-4");
+            navbar.classList.remove("py-2", "shadow");
+          }
+        });
+
+        // 移动端菜单切换
+        document
+          .getElementById("menu-toggle")
+          .addEventListener("click", function () {
+            const mobileMenu = document.getElementById("mobile-menu");
+            mobileMenu.classList.toggle("hidden");
+          });
+
+        // 微信订购流程互动
+        document
+          .getElementById("wechat-guide")
+          .addEventListener("click", function () {
+            const process = document.getElementById("order-process");
+            process.classList.toggle("hidden");
+
+            // 按钮文本切换
+            if (process.classList.contains("hidden")) {
+              this.innerHTML =
+                '<i class="fa fa-info-circle mr-2"></i> 查看订购流程';
+            } else {
+              this.innerHTML =
+                '<i class="fa fa-chevron-up mr-2"></i> 收起流程说明';
+            }
+          });
+
+        // 营养成分对比图表
+        const ctx = document.getElementById("nutritionChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ["蛋白质", "钙质", "铁元素", "维生素B"],
+            datasets: [
+              {
+                label: "本坊手工豆腐",
+                data: [8.5, 138, 2.5, 0.25],
+                backgroundColor: "rgba(196, 32, 33, 0.7)",
+                borderColor: "rgba(196, 32, 33, 1)",
+                borderWidth: 1,
+              },
+              {
+                label: "普通机制豆腐",
+                data: [6.2, 116, 1.8, 0.15],
+                backgroundColor: "rgba(212, 175, 55, 0.7)",
+                borderColor: "rgba(212, 175, 55, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "含量 (g/100g 或 mg/100g)",
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                position: "top",
+              },
+            },
+          },
+        });
+
+        // 平滑滚动到锚点
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const targetId = this.getAttribute("href");
+            if (targetId === "#") return;
+
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              // 关闭移动菜单（如果打开）
+              document.getElementById("mobile-menu").classList.add("hidden");
+
+              // 滚动到目标位置
+              window.scrollTo({
+                top: targetElement.offsetTop - 80,
+                behavior: "smooth",
+              });
+            }
+          });
+        });
+
+        // 季节性产品轮播功能 - 修复标签样式切换
+        const tabItems = document.querySelectorAll(".tab-item");
+        const productDetails = document.querySelectorAll(".product-detail");
+
+        // 为每个标签添加点击事件
+        tabItems.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            // 获取当前标签的索引
+            const index = this.getAttribute("data-index");
+
+            // 更新标签样式 - 统一基础样式，只区分激活状态
+            tabItems.forEach((item) => {
+              // 移除所有标签的激活状态样式
+              item.classList.remove(
+                "bg-white",
+                "shadow-sm",
+                "text-primary",
+                "font-medium"
+              );
+              // 添加统一的未激活状态样式
+              item.classList.add("text-gray-600", "hover:bg-white/50");
+            });
+
+            // 为当前点击的标签添加激活状态样式
+            this.classList.add(
+              "bg-white",
+              "shadow-sm",
+              "text-primary",
+              "font-medium"
+            );
+            this.classList.remove("text-gray-600", "hover:bg-white/50");
+
+            // 更新详情显示
+            productDetails.forEach((detail) => {
+              detail.classList.add("hidden");
+            });
+            const activeDetail = document.querySelector(
+              `.product-detail[data-index="${index}"]`
+            );
+            activeDetail.classList.remove("hidden");
+
+            // 添加淡入动画效果
+            activeDetail.style.opacity = "0";
+            activeDetail.style.transition = "opacity 0.5s ease";
+            setTimeout(() => {
+              activeDetail.style.opacity = "1";
+            }, 50);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
+
+

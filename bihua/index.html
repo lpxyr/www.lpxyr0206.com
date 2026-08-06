@@ -1,0 +1,1064 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>汉字笔画动画工具</title>
+    <!-- 引入拼音库 -->
+    <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.18.2/dist/index.js"></script>
+    <!-- 引入汉字笔画库 -->
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.0/dist/hanzi-writer.min.js"></script>
+    <!-- 引入字体图标 -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+        /* 基础样式调整 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            padding: 20px 15px;
+            background-image: radial-gradient(#e0f0ff 1px, transparent 1px),
+                radial-gradient(#e0f0ff 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px 15px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-size: 36px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .input-area {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 0 10px;
+        }
+
+        #char-input {
+            padding: 18px 22px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 22px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        #voice-select {
+            padding: 18px 22px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 20px;
+            background-color: white;
+            outline: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        #voice-select:focus {
+            border-color: #4096ff;
+            box-shadow: 0 0 0 3px rgba(64, 150, 255, 0.1);
+        }
+
+        #voice-select:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        #char-input:focus {
+            border-color: #4096ff;
+            box-shadow: 0 0 0 3px rgba(64, 150, 255, 0.1);
+        }
+
+        .btn {
+            padding: 18px 32px;
+            border-radius: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            border: none;
+        }
+
+        .btn i {
+            font-size: 22px;
+        }
+
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn.primary {
+            background-color: #4096ff;
+            color: white;
+        }
+
+        .btn.primary:hover:not(:disabled) {
+            background-color: #3086e8;
+        }
+
+        .btn.success {
+            background-color: #67c23a;
+            color: white;
+        }
+
+        .btn.success:hover:not(:disabled) {
+            background-color: #52af31;
+        }
+
+        .btn.secondary {
+            background-color: #909399;
+            color: white;
+        }
+
+        .btn.secondary:hover:not(:disabled) {
+            background-color: #7b7f85;
+        }
+
+        .animation-area {
+            margin-bottom: 30px;
+            padding: 20px 10px;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+        }
+
+        #chars-container {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 15px 0;
+        }
+
+        .char-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .char-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .char-pinyin {
+            font-size: 24px;
+            color: #333;
+            height: 36px;
+            font-family: Arial, sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            padding: 5px 10px;
+            border-radius: 6px;
+            background-color: #f0f7ff;
+        }
+
+        .char-pinyin:hover {
+            color: #4096ff;
+            background-color: #e6f4ff;
+        }
+
+        .pinyin-options {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 0;
+            margin-top: 8px;
+            min-width: 100px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            display: none;
+        }
+
+        .pinyin-option {
+            padding: 6px 15px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .pinyin-option:hover {
+            background-color: #f0f7ff;
+            color: #4096ff;
+        }
+
+        .char-canvas {
+            width: 160px;
+            height: 160px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 1px #f0f0f0;
+        }
+
+        .char-status {
+            font-size: 18px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .global-tip {
+            color: #666;
+            font-size: 18px;
+            margin-top: 12px;
+            line-height: 1.6;
+            padding: 12px 15px;
+            border-radius: 8px;
+            background-color: #f5f7fa;
+        }
+
+        .error-tip {
+            color: #f56c6c;
+            background-color: #fff2f2;
+        }
+
+        .success-tip {
+            color: #67c23a;
+            background-color: #f0f9eb;
+        }
+
+        .speech-info {
+            font-size: 16px;
+            color: #4096ff;
+            margin-top: 10px;
+            padding: 8px 15px;
+            border-radius: 8px;
+            background-color: #f0f7ff;
+        }
+
+        /* 控制区域样式 */
+        .control-area {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 15px;
+            background-color: #f5f7fa;
+            border-radius: 12px;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .speed-control label {
+            font-size: 20px;
+            color: #333;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        #speed-slider {
+            width: 200px;
+            cursor: pointer;
+            height: 8px;
+        }
+
+        #speed-value {
+            font-size: 20px;
+            color: #4096ff;
+            font-weight: 600;
+            min-width: 50px;
+        }
+
+        /* 移动端语音提示样式 */
+        .mobile-speech-guide {
+            margin: 15px 0;
+            padding: 12px 15px;
+            background-color: #fff8e6;
+            border-left: 4px solid #faad14;
+            border-radius: 4px;
+            color: #854d0e;
+            font-size: 16px;
+            display: none;
+        }
+
+        /* 权限请求按钮 */
+        .permission-btn {
+            background-color: #faad14;
+            color: white;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+
+            .input-area,
+            .control-area {
+                margin-bottom: 25px;
+                gap: 12px;
+            }
+
+            .btn {
+                padding: 15px 25px;
+                font-size: 18px;
+                width: 100%;
+                justify-content: center;
+            }
+
+            #char-input,
+            #voice-select {
+                width: 100%;
+                font-size: 20px;
+                padding: 15px 20px;
+            }
+
+            .char-canvas {
+                width: 140px;
+                height: 140px;
+            }
+
+            .char-pinyin {
+                font-size: 22px;
+            }
+
+            .char-status {
+                font-size: 16px;
+            }
+
+            .global-tip {
+                font-size: 16px;
+            }
+
+            .speed-control {
+                width: 100%;
+                padding: 10px 15px;
+            }
+
+            #speed-slider {
+                width: 150px;
+            }
+
+            /* 移动端显示语音指南 */
+            .mobile-speech-guide {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .char-canvas {
+                width: 120px;
+                height: 120px;
+            }
+
+            #chars-container {
+                gap: 15px;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>汉字笔画动画工具</h1>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="char-input"
+                placeholder="请输入中文文字（支持多个汉字）"
+                maxlength="15"
+            />
+            <select id="voice-select" disabled>
+                <option value="">选择语音</option>
+            </select>
+            <button id="start-btn" class="btn primary">
+                <i class="fas fa-play"></i> 开始写字
+            </button>
+            <button id="read-btn" class="btn success" disabled>
+                <i class="fas fa-volume-up"></i> 朗读文字
+            </button>
+        </div>
+
+        <!-- 移动端语音指南 -->
+        <div class="mobile-speech-guide">
+            <p><i class="fas fa-info-circle"></i> 移动端语音提示：请确保已授予浏览器麦克风/语音权限，并在系统设置中安装中文语音包。</p>
+            <button id="request-permission" class="btn permission-btn">
+                <i class="fas fa-microphone"></i> 请求语音权限
+            </button>
+        </div>
+
+        <!-- 控制区域 -->
+        <div class="control-area">
+            <div class="speed-control">
+                <label for="speed-slider">动画速度：</label>
+                <input
+                    type="range"
+                    id="speed-slider"
+                    min="0.3"
+                    max="5"
+                    step="0.1"
+                    value="1.2"
+                />
+                <span id="speed-value">1.2x</span>
+            </div>
+            <button id="pause-btn" class="btn secondary" disabled>
+                <i class="fas fa-pause"></i> 暂停
+            </button>
+            <button id="resume-btn" class="btn secondary" disabled>
+                <i class="fas fa-play"></i> 继续
+            </button>
+            <button id="replay-btn" class="btn secondary" disabled>
+                <i class="fas fa-redo"></i> 重播
+            </button>
+        </div>
+
+        <div class="animation-area">
+            <div id="chars-container"></div>
+        </div>
+
+        <div id="global-tip" class="global-tip">
+            提示：输入后点击按钮，汉字将横向排列并从左到右播放动画，支持拼音显示和朗读。多音字可点击拼音切换读音
+        </div>
+        <div id="speech-info" class="speech-info"></div>
+    </div>
+
+    <script>
+        // 从pinyin-pro库获取pinyin函数
+        const { pinyin } = pinyinPro;
+
+        const charInput = document.getElementById("char-input");
+        const startBtn = document.getElementById("start-btn");
+        const readBtn = document.getElementById("read-btn");
+        const charsContainer = document.getElementById("chars-container");
+        const globalTip = document.getElementById("global-tip");
+        const speechInfo = document.getElementById("speech-info");
+        const voiceSelect = document.getElementById("voice-select");
+        const requestPermissionBtn = document.getElementById("request-permission");
+
+        // 控制元素
+        const speedSlider = document.getElementById("speed-slider");
+        const speedValue = document.getElementById("speed-value");
+        const pauseBtn = document.getElementById("pause-btn");
+        const resumeBtn = document.getElementById("resume-btn");
+        const replayBtn = document.getElementById("replay-btn");
+
+        let writerInstances = [];
+        let lastInputText = "";
+        let currentText = "";
+        let chineseVoices = [];
+        let selectedVoice = null;
+        // 存储每个汉字的拼音选项
+        let pinyinOptions = {};
+
+        // 动画控制变量
+        let animationSpeed = 1.2; // 默认速度
+        let strokeDelay = 400; // 笔画之间的延迟，会随速度变化
+        let isAnimationPlaying = false;
+        let currentAnimationIndex = 0;
+        let writersWithElements = [];
+        // 存储每个字的当前笔画进度
+        let strokeProgress = {};
+
+        // 检查浏览器是否支持语音合成
+        const speechSupported = "speechSynthesis" in window;
+        if (!speechSupported) {
+            readBtn.style.display = "none";
+            voiceSelect.style.display = "none";
+            document.querySelector(".mobile-speech-guide").style.display = "none";
+            globalTip.textContent =
+                "提示：您的浏览器不支持语音朗读功能，请使用最新版Chrome或Edge浏览器";
+        } else {
+            // 移动端语音权限请求按钮逻辑（核心优化：直接请求麦克风权限触发弹窗）
+            requestPermissionBtn.addEventListener("click", async () => {
+                try {
+                    // 关键：通过请求麦克风权限间接触发语音相关权限弹窗（兼容多数移动端浏览器）
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    // 仅请求权限，不实际使用麦克风，立即停止流
+                    stream.getTracks().forEach(track => track.stop());
+                    globalTip.className = "global-tip success-tip";
+                    globalTip.textContent = "已获得语音/麦克风权限，可尝试朗读功能";
+                } catch (error) {
+                    // 针对性处理不同错误场景
+                    if (error.name === "NotAllowedError") {
+                        globalTip.className = "global-tip error-tip";
+                        globalTip.innerHTML = "权限被拒绝！请手动开启：<br>" +
+                            "• 安卓：设置 → 应用 → 对应浏览器 → 权限 → 麦克风 → 允许<br>" +
+                            "• iOS：设置 → 对应浏览器（如Safari/Chrome） → 麦克风 → 开启";
+                    } else if (error.name === "NotFoundError") {
+                        globalTip.className = "global-tip error-tip";
+                        globalTip.textContent = "设备无麦克风（或浏览器无法访问），无法获取权限";
+                    } else {
+                        globalTip.className = "global-tip error-tip";
+                        globalTip.textContent = `请求权限失败：${error.message}`;
+                    }
+                }
+            });
+
+            // 监听语音列表加载（兼容移动端语音包检测）
+            window.speechSynthesis.onvoiceschanged = () => {
+                voiceSelect.innerHTML = '<option value="">选择语音</option>';
+                const voices = window.speechSynthesis.getVoices();
+                // 扩大中文语音筛选范围（适配不同系统的语音命名）
+                chineseVoices = voices.filter(voice =>
+                    voice.lang.includes("zh-CN") ||
+                    voice.lang.includes("zh-Hans") ||
+                    voice.name.includes("Chinese") ||
+                    voice.name.includes("中文")
+                );
+
+                // 填充语音选项
+                chineseVoices.forEach((voice, index) => {
+                    const option = document.createElement("option");
+                    option.value = index;
+                    option.textContent = `${voice.name}（${voice.lang}）`;
+                    voiceSelect.appendChild(option);
+                });
+
+                voiceSelect.disabled = chineseVoices.length === 0;
+                // 移动端语音包缺失提示
+                if (chineseVoices.length === 0) {
+                    speechInfo.className = "speech-info error-tip";
+                    speechInfo.innerHTML = "未检测到中文语音包！<br>" +
+                        "• 安卓：设置 → 语言与输入法 → 文字转语音 → 添加中文语音<br>" +
+                        "• iOS：设置 → 辅助功能 → 语音内容 → 语音 → 选择「中文（中国大陆）」";
+                } else {
+                    speechInfo.textContent = `检测到 ${chineseVoices.length} 个中文语音，选择后可朗读`;
+                    selectedVoice = chineseVoices[0]; // 默认选中第一个
+                    voiceSelect.value = "0";
+                }
+            };
+
+            // 语音选择切换
+            voiceSelect.addEventListener("change", (e) => {
+                const idx = e.target.value;
+                if (idx !== "") {
+                    selectedVoice = chineseVoices[idx];
+                    speechInfo.textContent = `已选择：${selectedVoice.name}（${selectedVoice.lang}）`;
+                } else {
+                    selectedVoice = null;
+                    speechInfo.textContent = "请选择一个中文语音";
+                }
+            });
+
+            // 主动触发语音列表更新（解决部分浏览器加载延迟问题）
+            setTimeout(() => {
+                window.speechSynthesis.getVoices();
+                // 移动端额外触发一次空语音合成，初始化语音引擎
+                if (isMobileDevice()) {
+                    const testUtter = new SpeechSynthesisUtterance("");
+                    testUtter.volume = 0; // 静音避免打扰
+                    window.speechSynthesis.speak(testUtter);
+                }
+            }, 300);
+        }
+
+        // 检测是否为移动设备
+        function isMobileDevice() {
+            return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // 清空之前的动画实例
+        function clearPreviousAnimations(keepTip = false) {
+            writerInstances.forEach(writer => writer?.pauseAnimation());
+            writerInstances = [];
+            writersWithElements = [];
+            charsContainer.innerHTML = "";
+            pinyinOptions = {};
+            strokeProgress = {};
+            currentAnimationIndex = 0;
+            isAnimationPlaying = false;
+            updateControlButtons(false);
+
+            if (!keepTip) {
+                globalTip.className = "global-tip";
+                globalTip.textContent = "提示：输入后点击按钮，汉字将横向排列并从左到右播放动画，支持拼音显示和朗读。多音字可点击拼音切换读音";
+            }
+            startBtn.disabled = false;
+            readBtn.disabled = !currentText;
+        }
+
+        // 获取汉字拼音（支持多音字）
+        function getPinyinForText(text) {
+            try {
+                const result = pinyin(text, {
+                    toneType: "symbol", // 带声调（如ā、í）
+                    type: "array",      // 按字拆分返回数组
+                    multiple: true      // 启用多音字识别
+                });
+
+                const map = {};
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i];
+                    const pyList = Array.isArray(result[i]) ? [...new Set(result[i])] : [result[i]];
+                    map[i] = { char, options: pyList, current: pyList[0] };
+                }
+                return map;
+            } catch (err) {
+                console.error("获取拼音失败：", err);
+                return {};
+            }
+        }
+
+        // 创建单个汉字的动画容器
+        function createCharItem(char, index, pinyinData) {
+            const charItem = document.createElement("div");
+            charItem.className = "char-item";
+            charItem.dataset.index = index;
+            charItem.dataset.char = char;
+
+            // 拼音显示（支持多音字切换）
+            const pinyinContainer = document.createElement("div");
+            pinyinContainer.className = "char-pinyin";
+            const pinyinText = document.createElement("span");
+            pinyinText.textContent = pinyinData.current;
+
+            // 多音字选项下拉框
+            const pyOptions = document.createElement("div");
+            pyOptions.className = "pinyin-options";
+            if (pinyinData.options.length > 1) {
+                pinyinData.options.forEach(py => {
+                    const option = document.createElement("div");
+                    option.className = "pinyin-option";
+                    option.textContent = py;
+                    option.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        pinyinText.textContent = py;
+                        pinyinData.current = py;
+                        pyOptions.style.display = "none";
+                    });
+                    pyOptions.appendChild(option);
+                });
+                // 点击拼音显示/隐藏选项
+                pinyinContainer.addEventListener("click", () => {
+                    pyOptions.style.display = pyOptions.style.display === "block" ? "none" : "block";
+                });
+            }
+            pinyinContainer.appendChild(pinyinText);
+            pinyinContainer.appendChild(pyOptions);
+
+            // 点击页面其他地方关闭拼音选项
+            document.addEventListener("click", (e) => {
+                if (!pinyinContainer.contains(e.target)) {
+                    pyOptions.style.display = "none";
+                }
+            });
+
+            // 笔画动画画布
+            const canvasContainer = document.createElement("div");
+            canvasContainer.className = "char-canvas";
+            canvasContainer.id = `char-canvas-${index}`;
+
+            // 状态文本
+            const statusText = document.createElement("div");
+            statusText.className = "char-status";
+            statusText.textContent = "准备中";
+
+            // 组装容器
+            charItem.appendChild(pinyinContainer);
+            charItem.appendChild(canvasContainer);
+            charItem.appendChild(statusText);
+            charsContainer.appendChild(charItem);
+
+            // 获取画布尺寸（适配移动端）
+            const canvasStyle = window.getComputedStyle(canvasContainer);
+            const width = parseInt(canvasStyle.width);
+            const height = parseInt(canvasStyle.height);
+
+            // 初始化笔画进度
+            strokeProgress[index] = { strokeIndex: 0, progress: 0 };
+
+            // 创建笔画动画实例
+            const writer = HanziWriter.create(`char-canvas-${index}`, char, {
+                width,
+                height,
+                padding: 8,
+                showOutline: true,
+                strokeColor: "#2c3e50",
+                outlineColor: "#e0e0e0",
+                strokeAnimationSpeed: animationSpeed,
+                delayBetweenStrokes: strokeDelay,
+                onLoadCharDataSuccess: () => {
+                    statusText.textContent = "等待播放";
+                },
+                onLoadCharDataError: () => {
+                    statusText.className = "char-status error-tip";
+                    statusText.textContent = "加载失败";
+                    globalTip.className = "global-tip error-tip";
+                    globalTip.textContent = `「${char}」汉字数据加载失败，请尝试其他汉字`;
+                },
+                // 记录笔画进度（用于暂停/继续）
+                onStrokeProgress: (strokeIdx, progress) => {
+                    strokeProgress[index] = { strokeIndex: strokeIdx, progress };
+                }
+            });
+
+            return { writer, statusText, charItem };
+        }
+
+        // 按顺序播放汉字动画
+        function playAnimationInOrder(writers, currentIndex = 0) {
+            if (currentIndex >= writers.length) {
+                globalTip.className = "global-tip success-tip";
+                globalTip.textContent = "所有汉字动画播放完成！";
+                startBtn.disabled = false;
+                lastInputText = charInput.value.trim();
+                isAnimationPlaying = false;
+                updateControlButtons(false);
+                return;
+            }
+
+            currentAnimationIndex = currentIndex;
+            const { writer, statusText, charItem } = writers[currentIndex];
+            const char = charItem.dataset.char;
+            const index = parseInt(charItem.dataset.index);
+
+            globalTip.className = "global-tip success-tip";
+            globalTip.textContent = `正在播放第 ${currentIndex + 1}/${writers.length} 个字：「${char}」`;
+            statusText.className = "char-status success-tip";
+            statusText.textContent = "播放中";
+
+            isAnimationPlaying = true;
+            updateControlButtons(true);
+
+            // 播放动画（使用当前进度和速度）
+            writer.animateCharacter({
+                strokeAnimationSpeed: animationSpeed,
+                delayBetweenStrokes: strokeDelay,
+                startStroke: strokeProgress[index].strokeIndex,
+                startProgress: strokeProgress[index].progress,
+                onComplete: () => {
+                    statusText.textContent = "已完成";
+                    // 字与字之间的延迟（随速度调整）
+                    setTimeout(() => {
+                        playAnimationInOrder(writers, currentIndex + 1);
+                    }, strokeDelay * 0.5);
+                },
+                onStrokeProgress: (strokeIdx, progress) => {
+                    strokeProgress[index] = { strokeIndex: strokeIdx, progress };
+                }
+            });
+        }
+
+        // 暂停当前动画
+        function pauseCurrentAnimation() {
+            if (!isAnimationPlaying || currentAnimationIndex >= writersWithElements.length) return;
+
+            const { writer } = writersWithElements[currentAnimationIndex];
+            writer.pauseAnimation();
+            isAnimationPlaying = false;
+
+            const statusText = document.querySelector(`.char-item[data-index="${currentAnimationIndex}"] .char-status`);
+            statusText?.textContent("已暂停");
+
+            globalTip.textContent = `已暂停在第 ${currentAnimationIndex + 1}/${writersWithElements.length} 个字`;
+            updateControlButtons(false);
+        }
+
+        // 继续当前动画
+        function resumeCurrentAnimation() {
+            if (isAnimationPlaying || currentAnimationIndex >= writersWithElements.length) return;
+
+            const { writer } = writersWithElements[currentAnimationIndex];
+            writer.resumeAnimation();
+            isAnimationPlaying = true;
+
+            const statusText = document.querySelector(`.char-item[data-index="${currentAnimationIndex}"] .char-status`);
+            statusText?.textContent("播放中");
+
+            globalTip.textContent = `继续播放第 ${currentAnimationIndex + 1}/${writersWithElements.length} 个字`;
+            updateControlButtons(true);
+        }
+
+        // 重播所有动画
+        function replayAnimation() {
+            if (writersWithElements.length === 0) return;
+
+            // 暂停所有动画并重置进度
+            writerInstances.forEach(writer => writer.pauseAnimation());
+            Object.keys(strokeProgress).forEach(idx => {
+                strokeProgress[idx] = { strokeIndex: 0, progress: 0 };
+            });
+            // 重置状态文本
+            document.querySelectorAll(".char-status").forEach(el => {
+                el.className = "char-status";
+                el.textContent = "等待播放";
+            });
+
+            // 重新开始播放
+            playAnimationInOrder(writersWithElements);
+        }
+
+        // 更新控制按钮状态
+        function updateControlButtons(isPlaying) {
+            pauseBtn.disabled = !isPlaying;
+            resumeBtn.disabled = isPlaying;
+            replayBtn.disabled = writersWithElements.length === 0;
+        }
+
+        // 朗读功能（适配移动端语音参数）
+        function readTextWithSelectedPinyin() {
+            if (!speechSupported || !currentText || !selectedVoice) {
+                if (!selectedVoice) {
+                    globalTip.className = "global-tip error-tip";
+                    globalTip.textContent = "请先选择一个中文语音（或等待语音列表加载完成）";
+                }
+                return;
+            }
+
+            // 停止正在进行的朗读
+            window.speechSynthesis.cancel();
+
+            try {
+                // 生成带拼音的提示文本
+                let pyText = "";
+                for (let i = 0; i < currentText.length; i++) {
+                    pyText += `${currentText[i]}[${pinyinOptions[i]?.current || ""}] `;
+                }
+
+                const utter = new SpeechSynthesisUtterance(currentText);
+                utter.voice = selectedVoice;
+                // 移动端语音参数优化（语速、音调更适配手机播放）
+                utter.rate = isMobileDevice() ? Math.min(1.4, Math.max(0.6, animationSpeed * 0.6)) : Math.min(2, Math.max(0.5, animationSpeed * 0.8));
+                utter.pitch = isMobileDevice() ? 1.1 : 1.0; // 移动端略微提高音调，更清晰
+                utter.volume = 1.0;
+
+                // 开始朗读
+                window.speechSynthesis.speak(utter);
+
+                globalTip.className = "global-tip success-tip";
+                globalTip.textContent = `正在朗读：${pyText}`;
+
+                // 朗读完成回调
+                utter.onend = () => {
+                    globalTip.className = "global-tip";
+                    globalTip.textContent = `朗读完成：${pyText}`;
+                };
+
+                // 朗读错误处理（移动端针对性提示）
+                utter.onerror = (event) => {
+                    let errMsg = "朗读失败：";
+                    switch (event.error) {
+                        case "canceled":
+                            errMsg += "朗读被手动取消";
+                            break;
+                        case "not-allowed":
+                            errMsg += "无语音权限，请按提示手动开启";
+                            break;
+                        case "synthesis-failed":
+                            errMsg += `语音合成失败，建议：<br>` +
+                                "1. 切换其他中文语音<br>" +
+                                "2. 检查系统是否安装中文语音包<br>" +
+                                "3. 重启浏览器后重试";
+                            break;
+                        default:
+                            errMsg += event.error;
+                    }
+                    globalTip.className = "global-tip error-tip";
+                    globalTip.innerHTML = errMsg;
+                };
+            } catch (err) {
+                globalTip.className = "global-tip error-tip";
+                globalTip.textContent = `朗读出错：${err.message}`;
+                console.error("朗读错误：", err);
+            }
+        }
+
+        // 开始按钮点击事件
+        startBtn.addEventListener("click", () => {
+            let inputText = charInput.value.trim() || lastInputText;
+            if (!inputText) {
+                globalTip.className = "global-tip error-tip";
+                globalTip.textContent = "请输入中文文字（仅支持汉字）";
+                return;
+            }
+            // 验证是否为纯汉字
+            if (!/^[\u4e00-\u9fa5]+$/.test(inputText)) {
+                globalTip.className = "global-tip error-tip";
+                globalTip.textContent = "输入内容包含非汉字字符，请仅输入中文汉字";
+                return;
+            }
+
+            currentText = inputText;
+            readBtn.disabled = false;
+            clearPreviousAnimations(true);
+            startBtn.disabled = true;
+
+            const charList = inputText.split("");
+            pinyinOptions = getPinyinForText(inputText);
+
+            // 为每个汉字创建动画容器
+            charList.forEach((char, index) => {
+                const pyData = pinyinOptions[index] || {
+                    options: [pinyin(char, { toneType: "symbol" })],
+                    current: pinyin(char, { toneType: "symbol" })
+                };
+                const charData = createCharItem(char, index, pyData);
+                writersWithElements.push(charData);
+                writerInstances.push(charData.writer);
+            });
+
+            // 延迟启动动画，确保DOM渲染完成
+            setTimeout(() => {
+                playAnimationInOrder(writersWithElements);
+            }, 150);
+        });
+
+        // 朗读按钮点击事件
+        readBtn.addEventListener("click", readTextWithSelectedPinyin);
+
+        // 动画速度调节
+        speedSlider.addEventListener("input", (e) => {
+            animationSpeed = parseFloat(e.target.value);
+            strokeDelay = Math.floor(800 / animationSpeed); // 速度越快，笔画间隔越短
+            speedValue.textContent = `${animationSpeed.toFixed(1)}x`;
+
+            // 实时更新当前播放的动画速度
+            if (isAnimationPlaying && currentAnimationIndex < writersWithElements.length) {
+                const { writer, charItem } = writersWithElements[currentAnimationIndex];
+                const index = parseInt(charItem.dataset.index);
+
+                writer.pauseAnimation();
+                // 用新速度和当前进度重新播放
+                writer.animateCharacter({
+                    strokeAnimationSpeed: animationSpeed,
+                    delayBetweenStrokes: strokeDelay,
+                    startStroke: strokeProgress[index].strokeIndex,
+                    startProgress: strokeProgress[index].progress,
+                    onComplete: () => {
+                        const statusText = document.querySelector(`.char-item[data-index="${currentAnimationIndex}"] .char-status`);
+                        statusText?.textContent("已完成");
+                        setTimeout(() => {
+                            playAnimationInOrder(writersWithElements, currentAnimationIndex + 1);
+                        }, strokeDelay * 0.5);
+                    },
+                    onStrokeProgress: (strokeIdx, progress) => {
+                        strokeProgress[index] = { strokeIndex: strokeIdx, progress };
+                    }
+                });
+            }
+        });
+
+        // 暂停、继续、重播按钮事件
+        pauseBtn.addEventListener("click", pauseCurrentAnimation);
+        resumeBtn.addEventListener("click", resumeCurrentAnimation);
+        replayBtn.addEventListener("click", replayAnimation);
+
+        // 输入框回车触发开始
+        charInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                startBtn.click();
+                charInput.blur(); // 失去焦点，避免移动端键盘遮挡
+            }
+        });
+
+        // 输入框内容变化时更新朗读按钮状态
+        charInput.addEventListener("input", () => {
+            const inputText = charInput.value.trim();
+            readBtn.disabled = !inputText || !/^[\u4e00-\u9fa5]+$/.test(inputText);
+            if (inputText) currentText = inputText;
+        });
+
+        // 窗口大小变化时重置动画（适配移动端旋转屏幕）
+        window.addEventListener("resize", () => {
+            if (writerInstances.length > 0 || lastInputText) {
+                clearPreviousAnimations(true);
+                globalTip.className = "global-tip";
+                globalTip.textContent = `屏幕尺寸已调整，点击「开始写字」重新播放（上次输入：${lastInputText || "无"}）`;
+                startBtn.disabled = false;
+            }
+        });
+
+        // 页面加载完成初始化
+        window.addEventListener("load", () => {
+            // 恢复上次输入
+            if (lastInputText) {
+                charInput.value = lastInputText;
+                currentText = lastInputText;
+                readBtn.disabled = false;
+                globalTip.textContent = `已恢复上次输入：${lastInputText}，点击「开始写字」播放`;
+            }
+
+            // 初始化速度显示
+            speedValue.textContent = `${animationSpeed.toFixed(1)}x`;
+
+            // 检查是否为HTTPS（部分浏览器要求HTTPS才能使用媒体权限）
+            if (window.location.protocol !== "https:" && isMobileDevice()) {
+                globalTip.className = "global-tip error-tip";
+                globalTip.textContent = "移动端建议在HTTPS环境下使用，否则可能无法正常获取语音权限";
+            }
+
+            // 初始化语音合成
+            if (speechSupported) {
+                window.speechSynthesis.getVoices();
+            }
+        });
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,610 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>小学生竖式乘除法计算器（教学版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/img/sxstyles.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen pt-0 pb-4 md:pt-0 md:pb-8"
+  >
+    <!-- 导航 -->
+    <div class="custom-nav">
+      <div class="nav-content">
+        <div class="nav-title">
+          <i class="fas fa-calculator mr-2"></i>小学生竖式计算器
+        </div>
+        <div class="nav-buttons">
+          <button id="helpBtn" class="help-btn" title="帮助">
+            <i class="fas fa-info-circle text-xl"></i>
+          </button>
+          <button
+            onclick="showModal('donate')"
+            class="donate-btn"
+            title="支持开发者"
+          >
+            <i class="fas fa-heart text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- 右下角提示框容器 -->
+    <div id="toastContainer" class="toast-notification"></div>
+
+    <div
+      class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-xl transform transition-all duration-300 hover:shadow-xl mt-8"
+    >
+      <!-- 小学生提示模块 -->
+      <div class="student-note">
+        <i class="fas fa-lightbulb"></i>
+        <p id="gradeNote">
+          📚 三年级的小朋友已经学习乘法，可以开始挑战除法啦！
+        </p>
+      </div>
+
+      <!-- 年级选择 -->
+      <div class="grade-selector bg-white rounded-xl shadow-sm p-6 mb-8">
+        <label class="text-xl font-semibold text-gray-800 mb-4 block"
+          >选择年级（自动调整难度）：</label
+        >
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
+          <div
+            class="grade-option hover-lift bg-blue-50 border-2 border-transparent rounded-lg p-4 text-center cursor-pointer"
+            data-grade="1"
+          >
+            <span class="grade-badge bg-blue-100 text-blue-800">1年级</span>
+            <p class="text-sm text-gray-600 mt-2">加减法</p>
+          </div>
+          <div
+            class="grade-option hover-lift bg-green-50 border-2 border-transparent rounded-lg p-4 text-center cursor-pointer"
+            data-grade="2"
+          >
+            <span class="grade-badge bg-green-100 text-green-800">2年级</span>
+            <p class="text-sm text-gray-600 mt-2">加减乘法</p>
+          </div>
+          <div
+            class="grade-option hover-lift bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4 text-center cursor-pointer selected"
+            data-grade="3"
+          >
+            <span class="grade-badge bg-yellow-100 text-yellow-800">3年级</span>
+            <p class="text-sm text-gray-600 mt-2">四则运算</p>
+          </div>
+          <div
+            class="grade-option hover-lift bg-purple-50 border-2 border-transparent rounded-lg p-4 text-center cursor-pointer"
+            data-grade="4"
+          >
+            <span class="grade-badge bg-purple-100 text-purple-800">4年级</span>
+            <p class="text-sm text-gray-600 mt-2">多位数运算</p>
+          </div>
+          <div
+            class="grade-option hover-lift bg-pink-50 border-2 border-transparent rounded-lg p-4 text-center cursor-pointer"
+            data-grade="5"
+          >
+            <span class="grade-badge bg-pink-100 text-pink-800">5年级</span>
+            <p class="text-sm text-gray-600 mt-2">小数运算</p>
+          </div>
+          <div
+            class="grade-option hover-lift bg-orange-50 border-2 border-transparent rounded-lg p-4 text-center cursor-pointer"
+            data-grade="6"
+          >
+            <span class="grade-badge bg-orange-100 text-orange-800">6年级</span>
+            <p class="text-sm text-gray-600 mt-2">综合运算</p>
+          </div>
+        </div>
+
+        <div
+          id="grade-info"
+          class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100"
+        >
+          <h3 class="font-semibold text-blue-800 flex items-center">
+            <i class="fas fa-info-circle mr-2"></i>
+            <span id="grade-info-title">三年级学习内容</span>
+          </h3>
+          <p id="grade-info-content" class="text-blue-700 mt-2 text-sm">
+            三年级的小朋友已经学习乘法，可以开始挑战除法啦！
+          </p>
+        </div>
+      </div>
+
+      <!-- 模式选择（保持原有逻辑，仅优化样式） -->
+      <div class="mode-selector">
+        <label class="mode-selector-label block mb-2 font-medium text-gray-700"
+          >学习模式：</label
+        >
+        <div class="mode-options flex gap-4">
+          <div class="mode-option-wrapper">
+            <input
+              type="radio"
+              id="autoMode"
+              name="mode"
+              checked
+              class="sr-only"
+            />
+            <label
+              for="autoMode"
+              class="mode-option-label cursor-pointer flex items-center p-3 border-2 rounded-lg transition-all hover:shadow-md"
+            >
+              <i class="fas fa-play-circle text-blue-500 mr-2"></i>
+              <span>自动演示</span>
+            </label>
+          </div>
+          <div class="mode-option-wrapper">
+            <input type="radio" id="manualMode" name="mode" class="sr-only" />
+            <label
+              for="manualMode"
+              class="mode-option-label cursor-pointer flex items-center p-3 border-2 rounded-lg transition-all hover:shadow-md"
+            >
+              <i class="fas fa-pencil-alt text-green-500 mr-2"></i>
+              <span>手动练习</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 口诀标签 -->
+      <div class="mb-6">
+        <!-- 新增加法标签 -->
+        <span
+          id="additionTag"
+          class="formula-tag multiplication"
+          onclick="showModal('addition')"
+        >
+          <i class="fas fa-plus"></i> 加法口诀
+        </span>
+        <!-- 新增减法标签 -->
+        <span
+          id="subtractionTag"
+          class="formula-tag multiplication"
+          onclick="showModal('subtraction')"
+        >
+          <i class="fas fa-minus"></i> 减法口诀
+        </span>
+
+        <span
+          id="multiplicationTag"
+          class="formula-tag multiplication"
+          onclick="showModal('multiplication')"
+        >
+          <i class="fas fa-multiply"></i> 乘法口诀
+        </span>
+        <span
+          id="divisionTag"
+          class="formula-tag division"
+          onclick="showModal('division')"
+        >
+          <i class="fas fa-divide"></i> 除法口诀
+        </span>
+        <!-- <span
+          id="exercisesTag"
+          class="formula-tag"
+          onclick="showModal('exercises')"
+        >
+          <i class="fas fa-book"></i> 生成练习题
+        </span> -->
+        <!-- <span class="formula-tag donate" onclick="showModal('donate')">
+          <i class="fas fa-heart"></i> 支持开发者
+        </span> -->
+      </div>
+
+      <!-- 输入区域 -->
+      <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">选择运算类型</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div
+            class="operation-option hover-lift bg-orange-50 rounded-lg p-4 text-center cursor-pointer"
+            data-operation="add"
+          >
+            <i class="fas fa-plus text-2xl text-orange-500 mb-2"></i>
+            <p class="font-medium">加法</p>
+          </div>
+          <div
+            class="operation-option hover-lift bg-orange-50 rounded-lg p-4 text-center cursor-pointer"
+            data-operation="subtract"
+          >
+            <i class="fas fa-minus text-2xl text-orange-500 mb-2"></i>
+            <p class="font-medium">减法</p>
+          </div>
+          <div
+            class="operation-option hover-lift bg-blue-50 rounded-lg p-4 text-center cursor-pointer"
+            data-operation="multiply"
+          >
+            <i class="fas fa-times text-2xl text-blue-500 mb-2"></i>
+            <p class="font-medium">乘法</p>
+          </div>
+          <div
+            class="operation-option hover-lift bg-green-50 rounded-lg p-4 text-center cursor-pointer"
+            data-operation="divide"
+          >
+            <i class="fas fa-divide text-2xl text-green-500 mb-2"></i>
+            <p class="font-medium">除法</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 计算区 -->
+      <div
+        id="calculator-area"
+        class="bg-white rounded-xl shadow-sm p-6 mb-8 hidden"
+      >
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+          <i id="operation-icon" class="fas fa-plus text-orange-500 mr-2"></i>
+          <span id="operation-title">加法计算</span>
+        </h2>
+
+        <div class="flex flex-wrap items-end gap-4 mb-6">
+          <div class="w-full md:w-auto md:flex-1">
+            <label
+              id="num1Label"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              第一个数
+            </label>
+            <input
+              type="number"
+              id="num1"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
+              placeholder="请输入数字"
+            />
+          </div>
+          <div class="text-2xl font-bold text-gray-700">
+            <span id="operation-symbol">+</span>
+          </div>
+          <div class="w-full md:w-auto md:flex-1">
+            <label
+              id="num2Label"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              第二个数
+            </label>
+            <input
+              type="number"
+              id="num2"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
+              placeholder="请输入数字"
+            />
+          </div>
+          <div class="text-2xl font-bold text-gray-700">=</div>
+          <div>
+            <button
+              id="calcBtn"
+              class="bg-indigo-600 text-white px-6 py-2.5 rounded-lg hover:bg-indigo-700 font-medium transition-all-300"
+            >
+              计算
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="error"
+          class="hidden text-red-500 mb-6 p-3 bg-red-50 rounded-lg border border-red-100"
+        ></div>
+
+        <!-- 知识点提示区域 -->
+        <div id="knowledgeTip" class="knowledge-tip hidden"></div>
+
+        <!-- 分步操作区 -->
+        <div id="stepControls" class="step-controls hidden">
+          <button id="prevStep" class="step-btn" disabled>
+            <i class="fas fa-step-backward"></i> 上一步
+          </button>
+          <button id="nextStep" class="step-btn">
+            <i class="fas fa-step-forward"></i> 下一步
+          </button>
+        </div>
+
+        <!-- 手动输入区 -->
+        <div id="manualInputArea" class="manual-input hidden">
+          <label id="manualInputLabel">请输入这一步的结果：</label>
+          <input type="number" id="manualInput" />
+          <button id="checkAnswer" class="step-btn">
+            <i class="fas fa-check"></i> 检查答案
+          </button>
+          <div id="answerFeedback" class="feedback"></div>
+        </div>
+
+        <!-- 计算结果区域 -->
+        <div id="result" class="hidden">
+          <h2
+            id="processTitle"
+            class="text-xl font-semibold mb-4 pb-2 border-b border-gray-100"
+          >
+            计算过程：
+          </h2>
+          <div
+            id="vertical"
+            class="mb-6 p-4 rounded-lg min-h-[150px] flex items-center justify-center"
+          ></div>
+          <div class="p-4 bg-gray-50 rounded-lg mb-4">
+            <p class="text-lg">
+              结果：<span
+                id="finalResult"
+                class="font-semibold text-indigo-600 text-xl"
+              ></span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="error"
+        class="hidden text-red-500 mb-6 p-3 bg-red-50 rounded-lg border border-red-100"
+      ></div>
+
+      <!-- 知识点提示区域 -->
+      <div id="knowledgeTip" class="knowledge-tip hidden"></div>
+
+      <!-- 分步操作区 -->
+      <div id="stepControls" class="step-controls hidden">
+        <button id="prevStep" class="step-btn" disabled>
+          <i class="fas fa-step-backward"></i> 上一步
+        </button>
+        <button id="nextStep" class="step-btn">
+          <i class="fas fa-step-forward"></i> 下一步
+        </button>
+      </div>
+
+      <!-- 手动输入区 -->
+      <div id="manualInputArea" class="manual-input hidden">
+        <label id="manualInputLabel">请输入这一步的结果：</label>
+        <input type="number" id="manualInput" />
+        <button id="checkAnswer" class="step-btn">
+          <i class="fas fa-check"></i> 检查答案
+        </button>
+        <div id="answerFeedback" class="feedback"></div>
+      </div>
+
+      <div id="result" class="hidden">
+        <h2
+          id="processTitle"
+          class="text-xl font-semibold mb-4 pb-2 border-b border-gray-100"
+        >
+          乘法计算过程：
+        </h2>
+        <div
+          id="vertical"
+          class="mb-6 p-4 rounded-lg min-h-[150px] flex items-center justify-center"
+        ></div>
+        <div class="p-4 bg-gray-50 rounded-lg mb-4">
+          <p class="text-lg">
+            结果：<span
+              id="finalResult"
+              class="font-semibold text-indigo-600 text-xl"
+            ></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新增练习题独立模块 -->
+    <div
+      id="exercises-module"
+      class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-xl transform transition-all duration-300 hover:shadow-xl mt-8"
+    >
+      <h3 class="modal-title"><i class="fas fa-book"></i> 生成练习题</h3>
+
+      <div class="exercise-generator">
+        <div id="exerciseGradeNotice" class="student-note mb-3">
+          <i class="fas fa-info-circle"></i>
+          <p>三年级的小朋友已经学习乘法，可以开始挑战除法啦！</p>
+        </div>
+
+        <div class="exercise-controls">
+          <div class="exercise-setting">
+            <label>运算类型</label>
+            <select id="exerciseType">
+              <option value="multiply">乘法</option>
+              <option value="divide">除法</option>
+              <option value="both">混合</option>
+            </select>
+          </div>
+
+          <div class="exercise-setting">
+            <label>题目数量</label>
+            <input
+              type="number"
+              id="exerciseCount"
+              value="10"
+              min="5"
+              max="30"
+            />
+          </div>
+
+          <div class="exercise-setting">
+            <label>难度（根据年级）</label>
+            <select id="exerciseDifficulty">
+              <option value="1">1年级</option>
+              <option value="2">2年级</option>
+              <option value="3" selected>3年级</option>
+              <option value="4">4年级</option>
+              <option value="5">5年级</option>
+              <option value="6">6年级</option>
+            </select>
+          </div>
+        </div>
+        <div class="exercise-buttons">
+          <button id="generateExercises" class="step-btn">
+            <i class="fas fa-sync"></i> 生成题目
+          </button>
+          <button id="checkExercises" class="step-btn" hidden>
+            <i class="fas fa-check-circle"></i> 检查答案
+          </button>
+        </div>
+        <div id="exercisesContainer" class="exercises-container"></div>
+      </div>
+    </div>
+
+    <!-- 加法口诀弹窗 -->
+    <div id="addition-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title multiplication-title">
+            <i class="fas fa-plus"></i> 加法口诀表
+          </h3>
+          <span class="close-btn" onclick="hideModal('addition')">&times;</span>
+        </div>
+        <div id="addition-table" class="formula-table"></div>
+      </div>
+    </div>
+
+    <!-- 减法口诀弹窗 -->
+    <div id="subtraction-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title multiplication-title">
+            <i class="fas fa-minus"></i> 减法口诀表
+          </h3>
+          <span class="close-btn" onclick="hideModal('subtraction')"
+            >&times;</span
+          >
+        </div>
+        <div id="subtraction-table" class="formula-table"></div>
+      </div>
+    </div>
+    <!-- 乘法口诀弹窗 -->
+    <div id="multiplication-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title multiplication-title">
+            <i class="fas fa-multiply"></i> 乘法口诀表
+          </h3>
+          <span class="close-btn" onclick="hideModal('multiplication')"
+            >&times;</span
+          >
+        </div>
+        <div id="multiplication-table" class="formula-table"></div>
+      </div>
+    </div>
+
+    <!-- 除法口诀弹窗 -->
+    <div id="division-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title division-title">
+            <i class="fas fa-divide"></i> 除法口诀表
+          </h3>
+          <span class="close-btn" onclick="hideModal('division')">&times;</span>
+        </div>
+        <div id="division-table" class="formula-table"></div>
+      </div>
+    </div>
+
+    <!-- 捐助弹窗 -->
+    <div id="donate-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title donate-title-modal">
+            <i class="fas fa-heart"></i> 支持开发者
+          </h3>
+          <span class="close-btn" onclick="hideModal('donate')">&times;</span>
+        </div>
+        <div class="donate-container">
+          <h4 class="donate-title">感谢您的支持！</h4>
+          <p class="donate-description">
+            这个计算器是为帮助小学生更好地学习数学而开发的公益工具。如果您觉得它有用，
+            可以通过以下方式支持开发者，让我们能够持续改进和维护这个工具。
+          </p>
+          <div class="payment-methods">
+            <div class="payment-method alipay">
+              <div class="payment-icon">
+                <i class="fab fa-alipay"></i>
+              </div>
+              <div class="payment-name">支付宝</div>
+              <div class="qrcode-container">
+                <div class="qrcode-placeholder">
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/img/alipay.jpg"
+                    alt="支付宝二维码"
+                    width="100%"
+                    height="100%"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="payment-method wechat">
+              <div class="payment-icon">
+                <i class="fab fa-weixin"></i>
+              </div>
+              <div class="payment-name">微信支付</div>
+              <div class="qrcode-container">
+                <div class="qrcode-placeholder">
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/img/wechat.png"
+                    alt="微信支付二维码"
+                    width="100%"
+                    height="100%"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="donate-thanks">您的每一份支持都将帮助我们做得更好！</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 帮助模态框 -->
+    <div id="help-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">
+            <i class="fas fa-info-circle"></i> 使用帮助
+          </h3>
+          <span class="close-btn" onclick="hideModal('help')">&times;</span>
+        </div>
+        <div class="help-content">
+          <div class="help-section">
+            <h4><i class="fas fa-calculator"></i> 如何使用计算器？</h4>
+            <ol class="help-steps">
+              <li><span class="step-number">1</span> 选择年级调整难度级别</li>
+              <li>
+                <span class="step-number">2</span> 选择自动演示或手动练习模式
+              </li>
+              <li><span class="step-number">3</span> 输入数字并选择运算类型</li>
+              <li>
+                <span class="step-number">4</span> 点击计算按钮查看竖式过程
+              </li>
+              <li>
+                <span class="step-number">5</span> 通过分步按钮查看详细计算步骤
+              </li>
+            </ol>
+          </div>
+
+          <div class="help-section">
+            <h4><i class="fas fa-book"></i> 口诀表使用</h4>
+            <p>
+              点击对应的口诀标签可以查看加法、减法、乘法和除法口诀表，点击口诀表中的公式可直接带入计算器进行计算。
+            </p>
+          </div>
+
+          <div class="help-section">
+            <h4><i class="fas fa-pencil-alt"></i> 练习题生成</h4>
+            <p>
+              可以根据年级和需求生成相应数量的练习题进行练习，完成后点击检查答案按钮进行批改，系统会自动判断对错并给出提示。
+            </p>
+          </div>
+
+          <div class="help-tips">
+            <i class="fas fa-lightbulb"></i>
+            <p>小贴士：切换到手动练习模式可以更好地锻炼计算能力哦！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/img/sxscript.js"></script>
+  </body>
+</html>
+

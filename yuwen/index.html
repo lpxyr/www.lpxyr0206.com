@@ -1,0 +1,1284 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>汉字星球 🌟</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/hanzi-learn.css?v=20260728-12" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <div class="logo-icon">🌟</div>
+        汉字星球
+      </div>
+      <div class="header-right">
+        <button
+          class="cloud-account-btn"
+          id="cloud-account-btn"
+          type="button"
+          onclick="openCloudAccount()"
+          title="学习记录云同步"
+          aria-label="学习记录云同步"
+        >
+          <img id="cloud-account-avatar" alt="" hidden />
+          <i
+            class="fa-solid fa-user"
+            id="cloud-account-default-icon"
+            aria-hidden="true"
+          ></i>
+          <span class="cloud-account-dot" id="cloud-account-dot"></span>
+        </button>
+        <button
+          class="help-btn"
+          type="button"
+          onclick="openModal('ov-help')"
+          title="使用帮助"
+          aria-label="使用帮助"
+        >
+          <i class="fa-solid fa-info" aria-hidden="true"></i>
+        </button>
+      </div>
+    </header>
+    <div class="page-wrap">
+      <div class="bilibili-video-card">
+        <div class="bilibili-video-title">
+          <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
+          <span>汉字星球视频</span>
+        </div>
+        <div class="bilibili-video-wrap">
+          <video controls playsinline preload="metadata">
+            <source
+              src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/%E6%B1%89%E5%AD%97%E6%98%9F%E7%90%83318.mp4"
+              type="video/mp4"
+            />
+            当前浏览器不支持视频播放。
+          </video>
+        </div>
+      </div>
+
+      <div id="daily-char-wrap" style="margin-top: 16px"></div>
+
+      <div style="height: 4px"></div>
+
+      <div class="prog-wrap">
+        <div class="prog-head">
+          <span class="prog-label">今日进度 🌈</span>
+          <span class="prog-val"><span id="today-count">0</span>/10 字</span>
+        </div>
+        <div class="prog-bar">
+          <div class="prog-fill" id="progress" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="section" id="modules">
+        <div class="section-title">✨ 选一个开始吧</div>
+        <nav class="module-stage-nav" aria-label="学习阶段快捷导航">
+          <a href="#stage-preschool">🧸 幼儿启蒙</a>
+          <a href="#stage-basic">🌱 小学基础</a>
+          <a href="#stage-advanced">🚀 小学进阶</a>
+          <a href="#stage-tools">📚 学习工具</a>
+        </nav>
+
+        <div class="module-stage stage-preschool" id="stage-preschool">
+          <div class="module-stage-title">
+            <span>🧸 幼儿启蒙</span><small>3～6岁</small>
+          </div>
+          <div class="img-grid">
+            <div class="img-item" onclick="openScene()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg1.png"
+                class="grid-full-img"
+                alt="场景认字"
+              />
+            </div>
+            <div class="img-item" onclick="openMatch()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg11.png"
+                class="grid-full-img"
+                alt="积木识字"
+              />
+            </div>
+            <div class="img-item" onclick="openPhonics()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg6.png"
+                class="grid-full-img"
+                alt="拼音练习"
+              />
+            </div>
+            <div class="img-item" onclick="openGuoxue()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg14.png"
+                class="grid-full-img"
+                alt="国学"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="module-stage stage-basic" id="stage-basic">
+          <div class="module-stage-title">
+            <span>🌱 小学基础</span><small>一至三年级</small>
+          </div>
+          <div class="img-grid">
+            <div class="img-item" onclick="openQuiz()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg2.png"
+                class="grid-full-img"
+                alt="趣味闯关"
+              />
+            </div>
+            <div class="img-item" onclick="openWrite()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg4.png"
+                class="grid-full-img"
+                alt="练习写字"
+              />
+            </div>
+            <div class="img-item" onclick="openStroke()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg12.png"
+                class="grid-full-img"
+                alt="笔顺学习"
+              />
+            </div>
+            <div class="img-item" onclick="openRadicals()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg8.png"
+                class="grid-full-img"
+                alt="偏旁部首"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="module-stage stage-advanced" id="stage-advanced">
+          <div class="module-stage-title">
+            <span>🚀 小学进阶</span><small>三至六年级</small>
+          </div>
+          <div class="img-grid">
+            <div class="img-item" onclick="openSentence()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg9.png"
+                class="grid-full-img"
+                alt="造句练习"
+              />
+            </div>
+            <div class="img-item" onclick="openStory()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg5.png"
+                class="grid-full-img"
+                alt="成语故事"
+              />
+            </div>
+            <div class="img-item" onclick="openPoetry()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg13.png"
+                class="grid-full-img"
+                alt="唐诗宋词"
+              />
+            </div>
+            <div class="img-item" onclick="openModernDict()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg16.png"
+                class="grid-full-img"
+                alt="现代汉语词典"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="module-stage stage-tools" id="stage-tools">
+          <div class="module-stage-title">
+            <span>📚 学习工具</span><small>中小学通用</small>
+          </div>
+          <div class="img-grid">
+            <div class="img-item" onclick="openNoteBook()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg7.png"
+                class="grid-full-img"
+                alt="我的字典本"
+              />
+            </div>
+            <div class="img-item" onclick="openCourseware()">
+              <img
+                src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/bg15.png"
+                class="grid-full-img"
+                alt="课本课件"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="pb"></div>
+
+    <!-- 场景认字 -->
+    <div class="overlay" id="ov-scene">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_scene_recognition.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="scene-tab-shell">
+            <button
+              class="scene-scroll-btn"
+              onclick="scrollSceneTabs(-1)"
+              title="向左"
+            >
+              ‹
+            </button>
+            <div class="scene-tab-bar" id="scene-tabs"></div>
+            <button
+              class="scene-scroll-btn"
+              onclick="scrollSceneTabs(1)"
+              title="向右"
+            >
+              ›
+            </button>
+          </div>
+
+          <!-- 分类标签 -->
+          <div class="scene-category-bar" id="scene-category-bar"></div>
+
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 10px">
+            👇 点击词语，让 AI 郑老师来讲解
+          </p>
+          <div class="scene-object-wrap" id="scene-objects"></div>
+          <div id="scene-ai"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 趣味闯关 -->
+    <div class="overlay" id="ov-quiz">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_fun_challenge.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-bar" id="quiz-grade-tabs"></div>
+          <div class="quiz-streak" id="quiz-streak"></div>
+          <div class="quiz-pinyin" id="quiz-pinyin"></div>
+          <div class="quiz-char-big" id="quiz-char">学</div>
+
+          <div class="quiz-q" id="quiz-q"></div>
+          <div class="quiz-opts" id="quiz-opts"></div>
+          <div id="quiz-ai" style="margin-top: 10px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI字典 -->
+    <div class="overlay" id="ov-dict">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_ai_dictionary.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="dict-row">
+            <input
+              class="dict-input"
+              id="dict-input"
+              maxlength="4"
+              placeholder="输入汉字"
+              oninput="this.value=this.value.replace(/[^\u4e00-\u9fa5]/g,'')"
+            />
+            <button class="btn-primary" onclick="doDict()">问一问 🔍</button>
+          </div>
+          <div class="dict-history" id="dict-history"></div>
+          <div id="dict-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 写字评分 -->
+    <div class="overlay" id="ov-write">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_handwriting.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-bar" id="write-grade-tabs"></div>
+          <div class="write-hint">
+            请写这个字：<strong id="write-target"></strong>
+            <span
+              style="font-size: 20px; color: #94a3b8"
+              id="write-pinyin"
+            ></span>
+          </div>
+          <div style="margin: 12px 0; text-align: center">
+            <canvas id="write-canvas" width="280" height="280"></canvas>
+          </div>
+          <div class="write-actions">
+            <button class="btn-ghost" onclick="prevWriteChar()">◀ 换字</button>
+            <button class="btn-ghost" onclick="clearCanvas()">🗑 清除</button>
+            <button class="btn-ghost" onclick="nextWriteChar()">换字 ▶</button>
+          </div>
+          <div style="text-align: center; margin-bottom: 10px">
+            <button class="btn-primary" onclick="submitWrite()">
+              AI 评分 ⭐
+            </button>
+          </div>
+          <div id="write-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 成语故事 -->
+    <div class="overlay" id="ov-story">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_idiom_story.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">✕</button>
+        </div>
+        <div class="modal-body" id="story-body"></div>
+      </div>
+    </div>
+
+    <!-- 拼音练习 -->
+    <div class="overlay" id="ov-phonics">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_pinyin.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-bar" id="phonics-tabs">
+            <div class="tab active" onclick="switchPhonicsTab('shengmu',this)">
+              声母
+            </div>
+            <div class="tab" onclick="switchPhonicsTab('yunmu',this)">韵母</div>
+            <div class="tab" onclick="switchPhonicsTab('zhengtiyinjie',this)">
+              整体认读
+            </div>
+          </div>
+          <div id="phonics-grid-wrap"></div>
+          <div id="phonics-display" style="display: none">
+            <div class="phonics-big" id="phonics-big"></div>
+            <p
+              style="
+                font-size: 13px;
+                color: #64748b;
+                text-align: center;
+                margin-bottom: 8px;
+              "
+            >
+              带这个音的字 👇
+            </p>
+            <div class="phonics-word-row" id="phonics-words"></div>
+            <div id="phonics-ai"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 字典本 -->
+    <div class="overlay" id="ov-notebook">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_my_dictionary.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="nb-search">
+            <input
+              class="nb-input"
+              id="nb-input"
+              placeholder="搜索汉字…"
+              oninput="filterNB()"
+            />
+          </div>
+          <div class="nb-grid" id="nb-grid"></div>
+          <div class="nb-result" id="nb-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 偏旁部首 -->
+    <div class="overlay" id="ov-radical">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_ai_pp.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">✕</button>
+        </div>
+        <div class="modal-body" id="radical-body"></div>
+      </div>
+    </div>
+
+    <!-- 造句练习 -->
+    <div class="overlay" id="ov-sentence">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_sentence.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">x</button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-bar" id="sentence-grade-tabs"></div>
+          <div class="sentence-target">
+            请用「<span id="sentence-key"></span>」造一个句子
+          </div>
+          <div class="sentence-hint">
+            点击下面的词语和标点，拼出一个完整的句子；句号必须放进去，逗号可选
+          </div>
+          <div class="sentence-answer" id="sentence-answer"></div>
+          <div class="sentence-word-pool" id="sentence-pool"></div>
+          <div
+            style="
+              display: flex;
+              gap: 8px;
+              justify-content: center;
+              margin-bottom: 12px;
+            "
+          >
+            <button class="btn-ghost" onclick="resetSentence()">重排</button>
+            <button class="btn-primary" onclick="checkSentence()">
+              AI 评判
+            </button>
+            <button class="btn-ghost" onclick="nextSentence()">换一题</button>
+          </div>
+          <div id="sentence-ai"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 积木识字 -->
+    <div class="overlay" id="ov-match">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_renzi.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">x</button>
+        </div>
+        <div class="modal-body">
+          <div class="match-score" id="match-score">积木识字</div>
+          <div class="match-grid">
+            <div class="match-blocks" id="match-left"></div>
+            <div id="match-right" style="display: none"></div>
+          </div>
+          <div id="match-ai" style="margin-top: 10px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 笔顺学习 -->
+    <div class="overlay" id="ov-stroke">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_stroke_order.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">x</button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-bar" id="stroke-grade-tabs"></div>
+          <div
+            style="
+              display: flex;
+              gap: 8px;
+              flex-wrap: wrap;
+              margin-bottom: 14px;
+              overflow-x: auto;
+              padding-bottom: 4px;
+            "
+            id="stroke-char-tabs"
+          ></div>
+          <div class="stroke-pinyin" id="stroke-pinyin">人<span>rén</span></div>
+          <div class="stroke-display">
+            <div class="stroke-char-show" id="stroke-char-show">人</div>
+          </div>
+          <div class="stroke-tooltip" id="stroke-tooltip">
+            点击「下一笔」开始学习笔顺
+          </div>
+          <div class="stroke-ctrl">
+            <button class="btn-ghost" onclick="restartStrokeQuiz()">
+              重置笔画
+            </button>
+            <span class="stroke-count-label" id="stroke-count-label"
+              >第 0 / 0 笔</span
+            >
+            <button class="btn-ghost" onclick="showStrokeAnimation()">
+              演示笔顺
+            </button>
+            <button class="btn-primary" onclick="startStrokeQuiz()">
+              开始写字
+            </button>
+          </div>
+          <div class="stroke-steps-row" id="stroke-steps-row"></div>
+          <div id="stroke-ai"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 唐诗宋词 -->
+    <div class="overlay" id="ov-poetry">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_idiom_story.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">x</button>
+        </div>
+        <div class="modal-body">
+          <div class="classic-title">唐诗宋词</div>
+          <div class="poetry-toolbar">
+            <div class="classic-tabs" id="poetry-tabs"></div>
+            <input
+              class="poetry-search"
+              id="poetry-search"
+              placeholder="搜索诗名、作者或诗句"
+              oninput="searchPoetryList(this.value)"
+            />
+          </div>
+          <div class="classic-grid" id="poetry-list"></div>
+          <div class="poetry-pagination" id="poetry-pagination"></div>
+          <div class="poetry-detail" id="poetry-detail"></div>
+          <div id="poetry-ai" style="margin-top: 12px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 国学 -->
+    <div class="overlay" id="ov-guoxue">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_guoxue.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">x</button>
+        </div>
+        <div class="modal-body">
+          <div class="classic-title">国学启蒙</div>
+          <div class="classic-reader" id="guoxue-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 课本课件 -->
+    <div class="overlay" id="ov-courseware">
+      <div class="modal courseware-modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_kejian.png"
+            alt=""
+          /><button class="modal-close" onclick="closeCoursewareModal()">
+            x
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="courseware-list-view">
+            <div class="classic-title">课本课件</div>
+            <div
+              class="classic-tabs"
+              id="courseware-stage-tabs"
+              aria-label="课件学段"
+            ></div>
+            <div class="classic-grid" id="courseware-list"></div>
+          </div>
+          <div id="courseware-reader" class="courseware-reader" hidden>
+            <div class="courseware-toolbar">
+              <button
+                class="courseware-tool-btn"
+                onclick="closeCoursewarePdf()"
+              >
+                ← 返回
+              </button>
+              <strong id="courseware-pdf-title"></strong>
+            </div>
+            <div id="courseware-pdf-status" class="courseware-pdf-status"></div>
+            <div id="courseware-canvas-wrap" class="courseware-canvas-wrap">
+              <button
+                class="courseware-page-arrow courseware-page-arrow-left"
+                aria-label="上一页"
+                onclick="changeCoursewarePage(-1)"
+              >
+                ‹
+              </button>
+              <canvas id="courseware-pdf-canvas"></canvas>
+              <canvas id="courseware-pdf-canvas-right"></canvas>
+              <button
+                class="courseware-page-arrow courseware-page-arrow-right"
+                aria-label="下一页"
+                onclick="changeCoursewarePage(1)"
+              >
+                ›
+              </button>
+              <span id="courseware-page-info" class="courseware-page-info"
+                >0 / 0</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 现代汉语词典 -->
+    <div class="overlay" id="ov-modern-dict">
+      <div class="modal">
+        <div class="modal-hd">
+          <img
+            class="modal-title-icon"
+            src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/icon_hanyu.png"
+            alt=""
+          /><button class="modal-close" onclick="closeAll()">x</button>
+        </div>
+        <div class="modal-body">
+          <div class="classic-title">现代汉语词典</div>
+          <div class="modern-dict-row">
+            <input id="modern-dict-input" placeholder="输入汉字或词语" />
+            <button class="btn-primary" onclick="searchModernDict()">
+              查询
+            </button>
+          </div>
+          <div id="modern-dict-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CloudBase 连接状态 -->
+    <div class="overlay" id="ov-cloud-account">
+      <div class="modal cloud-account-modal">
+        <div class="modal-hd">
+          <div class="cloud-account-modal-icon">
+            <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+          </div>
+          <div class="modal-title">学习记录云同步</div>
+          <button
+            class="modal-close"
+            type="button"
+            onclick="closeAll()"
+            aria-label="关闭"
+          >
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="cloud-account-state" id="cloud-account-state">
+            <i
+              class="fa-solid fa-spinner fa-spin"
+              id="cloud-account-state-icon"
+              aria-hidden="true"
+            ></i>
+            <div>
+              <div class="cloud-account-state-title" id="cloud-account-state-title">
+                正在连接云端
+              </div>
+              <div class="cloud-account-state-text" id="cloud-account-state-text">
+                正在建立匿名学习账号，请稍候……
+              </div>
+            </div>
+          </div>
+          <button
+            class="btn-primary cloud-account-retry"
+            id="cloud-account-retry"
+            type="button"
+            onclick="connectCloudBase(true)"
+            hidden
+          >
+            <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+            重新连接
+          </button>
+          <div class="cloud-login-panel" id="cloud-login-panel" hidden>
+            <div class="cloud-profile-panel" id="cloud-profile-panel" hidden>
+              <div class="cloud-profile-head">
+                <button
+                  class="cloud-profile-avatar"
+                  type="button"
+                  onclick="chooseCloudAvatar()"
+                  title="点击更换头像"
+                  aria-label="更换头像"
+                >
+                  <img id="cloud-profile-avatar-img" alt="用户头像" hidden />
+                  <i
+                    class="fa-solid fa-user-graduate"
+                    id="cloud-profile-avatar-icon"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+                <input
+                  id="cloud-avatar-input"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onchange="uploadCloudAvatar(this)"
+                  hidden
+                />
+                <div>
+                  <div
+                    class="cloud-profile-name"
+                    id="cloud-profile-name"
+                    ondblclick="startCloudProfileNameEdit()"
+                    title="双击修改昵称"
+                  >
+                    汉字星球用户
+                  </div>
+                  <input
+                    class="cloud-profile-name-input"
+                    id="cloud-profile-name-input"
+                    maxlength="20"
+                    aria-label="修改昵称"
+                    onkeydown="handleCloudProfileNameKey(event)"
+                    onblur="finishCloudProfileNameEdit()"
+                    hidden
+                  />
+                  <div class="cloud-profile-badge">
+                    <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                    正式账号
+                  </div>
+                  <button
+                    class="cloud-avatar-delete"
+                    id="cloud-avatar-delete"
+                    type="button"
+                    onclick="openDeleteCloudAvatarConfirm()"
+                    hidden
+                  >
+                    删除头像
+                  </button>
+                </div>
+              </div>
+
+              <div class="cloud-profile-tabs">
+                <button
+                  class="active"
+                  type="button"
+                  data-cloud-profile-tab="overview"
+                  onclick="switchCloudProfileTab('overview')"
+                >
+                  <i class="fa-solid fa-id-card" aria-hidden="true"></i>
+                  个人资料
+                </button>
+                <button
+                  type="button"
+                  data-cloud-profile-tab="learning"
+                  onclick="switchCloudProfileTab('learning')"
+                >
+                  <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
+                  学习记录
+                </button>
+                <button
+                  type="button"
+                  data-cloud-profile-tab="favorites"
+                  onclick="switchCloudProfileTab('favorites')"
+                >
+                  <i class="fa-solid fa-bookmark" aria-hidden="true"></i>
+                  我的收藏
+                </button>
+                <button
+                  type="button"
+                  data-cloud-profile-tab="security"
+                  onclick="switchCloudProfileTab('security')"
+                >
+                  <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                  账号安全
+                </button>
+              </div>
+              <div
+                class="cloud-operation-message"
+                id="cloud-operation-message"
+                hidden
+              ></div>
+
+              <div
+                class="cloud-profile-view active"
+                data-cloud-profile-view="overview"
+              >
+                <div class="cloud-profile-info">
+                  <div>
+                    <span>手机号</span>
+                    <strong id="cloud-profile-phone">未绑定</strong>
+                  </div>
+                  <div>
+                    <span>邮箱</span>
+                    <strong id="cloud-profile-email">未绑定</strong>
+                  </div>
+                  <div>
+                    <span>登录名</span>
+                    <strong id="cloud-profile-username">未设置</strong>
+                  </div>
+                  <div>
+                    <span>用户 ID</span>
+                    <strong id="cloud-profile-uid">—</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cloud-profile-view" data-cloud-profile-view="learning">
+                <div class="cloud-learning-stats">
+                  <div><strong id="cloud-stat-learned">0</strong><span>已学汉字</span></div>
+                </div>
+                <div class="cloud-sync-row">
+                  <span id="cloud-sync-status">正在读取云端记录……</span>
+                  <button type="button" onclick="syncCloudLearningRecords(true)">
+                    <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                    立即同步
+                  </button>
+                </div>
+                <div class="cloud-learned-title">我的生字本</div>
+                <div class="cloud-learned-list" id="cloud-learned-list"></div>
+              </div>
+
+              <div class="cloud-profile-view" data-cloud-profile-view="favorites">
+                <div class="cloud-favorites-summary">
+                  收藏只保存在汉字、成语和古诗中，再次点击收藏按钮即可取消。
+                </div>
+                <div id="cloud-favorites-list"></div>
+              </div>
+
+              <div class="cloud-profile-view" data-cloud-profile-view="security">
+                <div class="cloud-security-current">
+                  <i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>
+                  <span>当前手机号</span>
+                  <strong id="cloud-security-phone">未绑定</strong>
+                </div>
+                <div class="cloud-bind-email" id="cloud-bind-email">
+                  <div class="cloud-learned-title">绑定邮箱</div>
+                  <p>输入当前账号密码验证身份，再验证需要绑定的新邮箱。</p>
+                  <label>
+                    <span>当前账号密码</span>
+                    <input
+                      id="cloud-bind-password"
+                      type="password"
+                      autocomplete="current-password"
+                      placeholder="请输入当前登录密码"
+                    />
+                  </label>
+                  <label>
+                    <span>新邮箱</span>
+                    <input
+                      id="cloud-bind-email-address"
+                      type="email"
+                      placeholder="请输入要绑定的邮箱"
+                    />
+                  </label>
+                  <label>
+                    <span>邮箱验证码</span>
+                    <div class="cloud-bind-code-row">
+                      <input
+                        id="cloud-bind-email-code"
+                        inputmode="numeric"
+                        maxlength="6"
+                        placeholder="6位验证码"
+                      />
+                      <button type="button" onclick="sendCloudBindEmailCode(this)">
+                        发送邮箱验证码
+                      </button>
+                    </div>
+                  </label>
+                  <button
+                    class="btn-primary"
+                    type="button"
+                    onclick="bindCloudEmail()"
+                  >
+                    确认绑定邮箱
+                  </button>
+                </div>
+                <div class="cloud-email-bound" id="cloud-email-bound" hidden>
+                  <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                  邮箱已绑定：<strong id="cloud-email-bound-value"></strong>
+                </div>
+              </div>
+            </div>
+            <div class="cloud-login-tabs">
+              <button
+                class="cloud-login-tab active"
+                type="button"
+                data-cloud-login="password"
+                onclick="switchCloudLogin('password')"
+              >
+                <i class="fa-solid fa-user-lock" aria-hidden="true"></i>
+                账号密码
+              </button>
+              <button
+                class="cloud-login-tab"
+                type="button"
+                data-cloud-login="code"
+                onclick="switchCloudLogin('code')"
+              >
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                验证码登录
+              </button>
+            </div>
+
+            <div class="cloud-login-form active" data-cloud-login-form="password">
+              <label>
+                <span>账号</span>
+                <input
+                  id="cloud-login-username"
+                  autocomplete="username"
+                  placeholder="手机号、邮箱或用户名"
+                />
+              </label>
+              <label>
+                <span>密码</span>
+                <div class="cloud-password-field">
+                  <input
+                    id="cloud-login-password"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="请输入密码"
+                  />
+                  <button
+                    type="button"
+                    onclick="togglePasswordVisibility('cloud-login-password', this)"
+                    aria-label="显示密码"
+                    title="显示密码"
+                  >
+                    <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </label>
+              <button class="btn-primary" type="button" onclick="loginCloudPassword()">
+                登录账号
+              </button>
+              <div class="cloud-login-actions">
+                <button type="button" onclick="openCloudRegistration()">
+                  <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                  注册账号
+                </button>
+                <button type="button" onclick="toggleCloudPasswordReset(true)">
+                  <i class="fa-solid fa-key" aria-hidden="true"></i>
+                  忘记密码
+                </button>
+              </div>
+              <div class="cloud-password-reset" id="cloud-password-reset" hidden>
+                <div class="cloud-password-reset-title">
+                  <strong>找回密码</strong>
+                  <button type="button" onclick="toggleCloudPasswordReset(false)">
+                    ×
+                  </button>
+                </div>
+                <label>
+                  <span>注册手机号或邮箱</span>
+                  <input
+                    id="cloud-reset-account"
+                    autocomplete="username"
+                    placeholder="请输入手机号或邮箱"
+                  />
+                </label>
+                <div class="cloud-code-row">
+                  <label>
+                    <span>验证码</span>
+                    <input
+                      id="cloud-reset-code"
+                      inputmode="numeric"
+                      autocomplete="one-time-code"
+                      maxlength="6"
+                      placeholder="6位验证码"
+                    />
+                  </label>
+                  <button type="button" onclick="sendCloudResetCode(this)">
+                    获取验证码
+                  </button>
+                </div>
+                <label>
+                  <span>设置新密码</span>
+                  <input
+                    id="cloud-reset-password"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="8～32位，包含字母和数字"
+                  />
+                </label>
+                <button
+                  class="btn-primary"
+                  type="button"
+                  onclick="resetCloudPassword()"
+                >
+                  确认重设密码
+                </button>
+              </div>
+            </div>
+
+            <div class="cloud-login-form" data-cloud-login-form="code">
+              <label>
+                <span>手机号或邮箱</span>
+                <input
+                  id="cloud-login-code-account"
+                  autocomplete="username"
+                  placeholder="请输入手机号或邮箱"
+                />
+              </label>
+              <div class="cloud-code-row">
+                <label>
+                  <span>验证码</span>
+                  <input
+                    id="cloud-login-code"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    maxlength="6"
+                    placeholder="6位验证码"
+                  />
+                </label>
+                <button type="button" onclick="sendCloudCode(this)">
+                  获取验证码
+                </button>
+              </div>
+              <button class="btn-primary" type="button" onclick="loginCloudCode()">
+                验证码登录
+              </button>
+            </div>
+
+            <button
+              class="cloud-logout-btn"
+              id="cloud-logout-btn"
+              type="button"
+              onclick="logoutCloudAccount()"
+              hidden
+            >
+              <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+              退出当前账号
+            </button>
+          </div>
+          <p class="cloud-account-tip" id="cloud-account-tip">
+            未登录正式账号时自动使用游客模式；现有本地学习记录和功能保持不变。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 删除头像确认 -->
+    <div class="overlay" id="ov-delete-avatar">
+      <div class="modal cloud-delete-avatar-modal">
+        <div class="modal-body">
+          <div class="cloud-delete-avatar-icon">
+            <i class="fa-solid fa-user-xmark" aria-hidden="true"></i>
+          </div>
+          <div class="cloud-delete-avatar-title">删除当前头像？</div>
+          <p>删除后将恢复默认头像。</p>
+          <div class="cloud-delete-avatar-actions">
+            <button type="button" onclick="closeDeleteCloudAvatarConfirm()">
+              取消
+            </button>
+            <button class="danger" type="button" onclick="deleteCloudAvatar()">
+              删除头像
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 注册账号 -->
+    <div class="overlay" id="ov-cloud-register">
+      <div class="modal cloud-register-modal">
+        <div class="modal-hd">
+          <div class="cloud-account-modal-icon">
+            <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+          </div>
+          <div class="modal-title">注册账号</div>
+          <button
+            class="modal-close"
+            type="button"
+            onclick="closeCloudRegistration()"
+            aria-label="返回登录"
+          >
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="cloud-register-tip">
+            输入手机号或邮箱，系统会自动使用对应方式发送验证码。
+          </p>
+          <div class="cloud-register-form">
+            <label>
+              <span>手机号或邮箱</span>
+              <input
+                id="cloud-register-account"
+                autocomplete="username"
+                placeholder="手机号或邮箱"
+              />
+            </label>
+            <div class="cloud-code-row">
+              <label>
+                <span>验证码</span>
+                <input
+                  id="cloud-register-code"
+                  inputmode="numeric"
+                  autocomplete="one-time-code"
+                  maxlength="6"
+                  placeholder="6位验证码"
+                />
+              </label>
+              <button type="button" onclick="sendCloudRegistrationCode(this)">
+                获取验证码
+              </button>
+            </div>
+            <label>
+              <span>设置密码</span>
+              <input
+                id="cloud-register-password"
+                type="password"
+                autocomplete="new-password"
+                placeholder="8～32位，包含字母和数字"
+              />
+            </label>
+            <label>
+              <span>昵称（选填）</span>
+              <input
+                id="cloud-register-nickname"
+                maxlength="20"
+                placeholder="默认：汉字星球用户"
+              />
+            </label>
+            <button
+              class="btn-primary"
+              type="button"
+              onclick="registerCloudAccount()"
+            >
+              完成注册
+            </button>
+            <button
+              class="cloud-register-back"
+              type="button"
+              onclick="closeCloudRegistration()"
+            >
+              已有账号，返回登录
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 使用帮助 -->
+    <div class="overlay" id="ov-help">
+      <div class="modal help-modal">
+        <div class="modal-hd">
+          <div class="help-modal-icon">
+            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+          </div>
+          <div class="modal-title">使用说明</div>
+          <button
+            class="modal-close"
+            type="button"
+            onclick="closeAll()"
+            aria-label="关闭"
+          >
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="help-intro">
+            欢迎来到汉字星球，选择适合的学习阶段和功能即可开始学习。
+          </div>
+          <div class="help-list">
+            <div class="help-item">
+              <span>1</span>
+              <p>
+                在“选一个开始吧”中按学习阶段选择识字、拼音、词语、阅读等功能。
+              </p>
+            </div>
+            <div class="help-item">
+              <span>2</span>
+              <p>
+                笔顺学习支持笔画演示、按步查看和描红练习，可点击单个汉字切换内容。
+              </p>
+            </div>
+            <div class="help-item">
+              <span>3</span>
+              <p>
+                课本课件按小学、中学、年级和上下册选择，电脑端双页查看，手机端单页查看。
+              </p>
+            </div>
+            <div class="help-item">
+              <span>4</span>
+              <p>
+                带有朗读按钮的内容可以播放语音；AI讲解和语音功能需要保持网络连接。
+              </p>
+            </div>
+            <div class="help-item">
+              <span>5</span>
+              <p>
+                如遇内容加载失败，请检查网络后刷新页面，或稍后重新点击对应功能。
+              </p>
+            </div>
+          </div>
+          <div class="help-resource-note">
+            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+            <span>部分资源来自网络，如需删除请联系 QQ：273759640</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 通关弹窗 -->
+    <div class="win-modal" id="win-modal">
+      <div class="win-box">
+        <span class="win-emoji" id="win-emoji">🎉</span>
+        <div class="win-title" id="win-title">太棒了！</div>
+        <div class="win-sub" id="win-sub">继续加油！</div>
+        <button class="btn-primary" onclick="closeWin()" style="width: 100%">
+          继续学习
+        </button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/sentence-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/quiz-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/story-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/scene-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/daily-char-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/write-char-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/stroke-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/radical-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/block-words.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.7.0/dist/hanzi-writer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3.26.0"></script>
+    <script src="https://static.cloudbase.net/cloudbase-js-sdk/2.27.1/cloudbase.full.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/wjzcd2011/yuxiaoxiong/hanzi/hanzi-learn.js?v=20260728-09"></script>
+  </body>
+</html>
+
+
+
+
+       
+
+

@@ -1,0 +1,1052 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BabyPure - 高端婴幼儿产品专家</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 优化顶部特征卡片动画 */
+        .floating-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255,255,255,0.8);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.4s ease;
+            animation: floatUp 3s ease-in-out infinite;
+            animation-delay: calc(var(--delay) * 0.3s);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .feature-item:nth-child(1) { --delay: 1; }
+        .feature-item:nth-child(2) { --delay: 2; }
+        .feature-item:nth-child(3) { --delay: 3; }
+        
+        @keyframes floatUp {
+            0%, 100% { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+            50% { 
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            animation: none;
+        }
+        
+        .feature-item i {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            background: var(--primary-light);
+            padding: 0.8rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover i {
+            transform: scale(1.1);
+            background: rgba(212, 175, 55, 0.2);
+        }
+        
+        .feature-item div {
+            flex: 1;
+        }
+        
+        .feature-item strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            color: var(--dark);
+        }
+        
+        .feature-item p {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin: 0;
+        }
+        
+        /* 其他样式保持不变 */
+        :root {
+            --primary: #2a5c5c;
+            --primary-light: #e8f2f2;
+            --secondary: #d4af37;
+            --accent: #c44536;
+            --success: #27ae60;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+            --gray: #6b7280;
+            --gray-light: #f8f9fa;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 40px rgba(0,0,0,0.12);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+
+        /* 3D导航栏 */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.2rem 5%;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            transition: var(--transition);
+            transform: translateZ(0);
+        }
+
+        header.scrolled {
+            padding: 0.8rem 5%;
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            perspective: 1000px;
+        }
+
+        .logo-content {
+            display: flex;
+            align-items: center;
+            transition: transform 0.6s ease;
+        }
+
+        .logo:hover .logo-content {
+            transform: rotateY(10deg);
+        }
+
+        .logo i {
+            margin-right: 0.8rem;
+            font-size: 2rem;
+            color: var(--secondary);
+            filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.3));
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover:before {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* 3D主横幅 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, 
+                var(--primary-light) 0%, 
+                rgba(232, 242, 242, 0.8) 50%,
+                var(--light) 100%);
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .hero:before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            top: -50%;
+            left: -50%;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text {
+            flex: 1;
+            max-width: 600px;
+            transform-style: preserve-3d;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: slideInRight 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px) rotateY(10deg); }
+            to { opacity: 1; transform: translateX(0) rotateY(0deg); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px) rotateY(-10deg); }
+            to { opacity: 1; transform: translateX(0) rotateY(0deg); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* 产品分类导航 */
+        .category-nav {
+            background: var(--gray-light);
+            padding: 2rem 5%;
+            position: sticky;
+            top: 80px;
+            z-index: 999;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            padding: 1rem 2rem;
+            background: var(--light);
+            border: 2px solid transparent;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-tab:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .category-tab:hover:before {
+            left: 100%;
+        }
+
+        .category-tab.active {
+            background: var(--primary);
+            color: var(--light);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(42, 92, 92, 0.3);
+        }
+
+        .category-tab:hover:not(.active) {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* 3D产品网格 */
+        .products-section {
+            padding: 5rem 5%;
+            background: var(--light);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            perspective: 1000px;
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+            transform-style: preserve-3d;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 2rem auto 0;
+            font-size: 1.2rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .product-card {
+            background: var(--light);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+        }
+
+        .product-card:hover {
+            transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(42,92,92,0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover:before {
+            opacity: 1;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+            transform: translateZ(20px);
+        }
+
+        .product-image {
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary) 0%, #3a7c7c 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.1)" d="M0,0 L100,0 L100,100 Z"></path></svg>');
+            background-size: cover;
+        }
+
+        .product-icon {
+            font-size: 4rem;
+            color: rgba(255,255,255,0.9);
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+
+        .product-info {
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .product-info p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .product-features li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .product-features li:hover {
+            transform: translateX(10px);
+        }
+
+        .product-features i {
+            color: var(--secondary);
+            margin-right: 1rem;
+            font-size: 0.8rem;
+            background: var(--primary-light);
+            padding: 0.3rem;
+            border-radius: 50%;
+        }
+
+        /* 联系区域 */
+        .contact-section {
+            padding: 6rem 5%;
+            background: linear-gradient(135deg, var(--primary) 0%, #1e4a4a 100%);
+            color: var(--light);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 Z"></path></svg>');
+            background-size: cover;
+        }
+
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .contact-section p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .wechat-card {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 20px;
+            display: inline-block;
+            color: var(--dark);
+            box-shadow: var(--shadow-hover);
+            margin-top: 2rem;
+            max-width: 400px;
+            width: 100%;
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .wechat-card:hover {
+            transform: perspective(1000px) rotateX(0deg) translateY(-10px);
+        }
+
+        .wechat-icon {
+            font-size: 4rem;
+            color: #2ecc71;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .wechat-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .wechat-card p {
+            margin-bottom: 2rem;
+            color: var(--gray);
+        }
+
+        .wechat-qr {
+            width: 200px;
+            height: 200px;
+            background: #f5f5f5;
+            margin: 2rem auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            border: 2px solid rgba(0,0,0,0.05);
+            transition: transform 0.5s ease;
+        }
+
+        .wechat-qr:hover {
+            transform: scale(1.1);
+        }
+
+        .wechat-id {
+            background-color: var(--primary-light);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .wechat-id:hover {
+            background-color: #d1e5e5;
+            transform: translateY(-2px);
+        }
+
+        /* 浮动按钮 */
+        .float-buttons {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .float-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            animation: pulse 2s infinite;
+        }
+
+        .float-btn.wechat {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .float-btn.phone {
+            background: linear-gradient(135deg, var(--primary) 0%, #2a5c5c 100%);
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                max-width: 100%;
+                margin-bottom: 3rem;
+            }
+            
+            .product-showcase {
+                width: 300px;
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D导航栏 -->
+    <header id="mainHeader">
+        <nav>
+            <a href="#" class="logo">
+                <div class="logo-content">
+                    <i class="fas fa-baby"></i>
+                    <span>BabyPure</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#products">产品系列</a></li>
+                <li><a href="#stages">分段营养</a></li>
+                <li><a href="#contact">联系我们</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 3D主横幅 -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>纯粹营养<br>守护成长每一步</h1>
+                <p>源自欧洲纯净奶源，科学配方精准营养，为宝宝每个成长阶段提供专业呵护</p>
+                
+                <div class="floating-features">
+                    <div class="feature-item">
+                        <i class="fas fa-leaf"></i>
+                        <div>
+                            <strong>欧盟认证纯净奶源</strong>
+                            <p>零添加零污染，安全可靠</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-flask"></i>
+                        <div>
+                            <strong>科学分段营养</strong>
+                            <p>精准配比，贴合各阶段需求</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shipping-fast"></i>
+                        <div>
+                            <strong>同城快速配送</strong>
+                            <p>2小时内送达，全城覆盖</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="product-showcase">
+                    <div class="product-bottle">
+                        <div class="bottle-label">初生婴儿配方</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 产品分类导航 -->
+    <section class="category-nav" id="stages">
+        <div class="category-tabs">
+            <button class="category-tab active" data-category="all">全部产品</button>
+            <button class="category-tab" data-category="milk">配方奶粉</button>
+            <button class="category-tab" data-category="food">辅食营养</button>
+            <button class="category-tab" data-category="care">护理用品</button>
+            <button class="category-tab" data-category="toys">玩具用品</button>
+        </div>
+    </section>
+
+    <!-- 3D产品展示 -->
+    <section class="products-section" id="products">
+        <div class="section-title">
+            <h2>精选婴幼儿产品</h2>
+            <p>专业配方，科学配比，为宝宝健康成长提供全方位呵护</p>
+        </div>
+        
+        <div class="products-grid">
+            <!-- 配方奶粉产品 -->
+            <div class="product-card" data-category="milk">
+                <div class="product-badge">新品上市</div>
+                <div class="product-image">
+                    <i class="fas fa-wine-bottle product-icon"></i>
+                </div>
+                <div class="product-info">
+                    <h3>初生婴儿配方奶粉 (0-6个月)</h3>
+                    <p>专为新生儿设计，营养配比接近母乳，建立健康基础</p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> 富含DHA和ARA，促进大脑发育</li>
+                        <li><i class="fas fa-check"></i> 添加益生元，维护肠道健康</li>
+                        <li><i class="fas fa-check"></i> 科学钙磷比，支持骨骼发育</li>
+                        <li><i class="fas fa-check"></i> 易于消化吸收，减少不适</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="product-card" data-category="milk">
+                <div class="product-badge">热销推荐</div>
+                <div class="product-image">
+                    <i class="fas fa-wine-bottle product-icon"></i>
+                </div>
+                <div class="product-info">
+                    <h3>较大婴儿配方奶粉 (6-12个月)</h3>
+                    <p>满足爬行期宝宝营养需求，支持快速生长发育</p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> 高含量铁元素，预防缺铁性贫血</li>
+                        <li><i class="fas fa-check"></i> 强化锌、钙等微量元素</li>
+                        <li><i class="fas fa-check"></i> 添加胆碱，促进大脑发育</li>
+                        <li><i class="fas fa-check"></i> 优化脂肪配比，提供充足能量</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="product-card" data-category="food">
+                <div class="product-image">
+                    <i class="fas fa-apple-alt product-icon"></i>
+                </div>
+                <div class="product-info">
+                    <h3>有机婴儿米粉辅食</h3>
+                    <p>易消化吸收的宝宝第一口辅食，100%有机原料</p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> 100%有机认证原料</li>
+                        <li><i class="fas fa-check"></i> 富含铁元素和膳食纤维</li>
+                        <li><i class="fas fa-check"></i> 无添加糖和盐</li>
+                        <li><i class="fas fa-check"></i> 易于消化吸收</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="product-card" data-category="care">
+                <div class="product-image">
+                    <i class="fas fa-baby-carriage product-icon"></i>
+                </div>
+                <div class="product-info">
+                    <h3>婴儿纸尿裤系列</h3>
+                    <p>超薄透气设计，呵护宝宝娇嫩肌肤</p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> 超强吸水锁水能力</li>
+                        <li><i class="fas fa-check"></i> 柔软亲肤无纺布材质</li>
+                        <li><i class="fas fa-check"></i> 尿湿显示条设计</li>
+                        <li><i class="fas fa-check"></i> 透气防漏侧边</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="product-card" data-category="toys">
+                <div class="product-badge">益智推荐</div>
+                <div class="product-image">
+                    <i class="fas fa-rattle product-icon"></i>
+                </div>
+                <div class="product-info">
+                    <h3>婴儿摇铃玩具套装</h3>
+                    <p>促进听觉和触觉发育，安全环保材质</p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> 安全环保ABS材质</li>
+                        <li><i class="fas fa-check"></i> 柔和悦耳声音设计</li>
+                        <li><i class="fas fa-check"></i> 易于抓握的造型</li>
+                        <li><i class="fas fa-check"></i> 刺激感官发育</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="product-card" data-category="food">
+                <div class="product-badge">营养升级</div>
+                <div class="product-image">
+                    <i class="fas fa-carrot product-icon"></i>
+                </div>
+                <div class="product-info">
+                    <h3>果蔬泥营养辅食</h3>
+                    <p>多种口味搭配，满足宝宝味蕾发育需求</p>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> 新鲜果蔬原料制作</li>
+                        <li><i class="fas fa-check"></i> 无防腐剂添加</li>
+                        <li><i class="fas fa-check"></i> 富含维生素和矿物质</li>
+                        <li><i class="fas fa-check"></i> 细腻易吞咽质地</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系区域 -->
+    <section class="contact-section" id="contact">
+        <div class="contact-content">
+            <h2>需要专业营养建议？</h2>
+            <p>我们的认证营养师为您提供一对一专业咨询，帮助选择最适合宝宝的配方</p>
+            
+            <div class="wechat-card">
+                <div class="wechat-icon">
+                    <i class="fab fa-weixin"></i>
+                </div>
+                <h3>添加营养专家微信</h3>
+                <p>扫描二维码，获取专业喂养建议和产品咨询</p>
+                <div class="wechat-qr">
+                    <i class="fas fa-qrcode" style="font-size: 6rem; color: #ccc;"></i>
+                </div>
+                <p>微信号：<span class="wechat-id">BabyPure_Expert</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 浮动按钮 -->
+    <div class="float-buttons">
+        <div class="float-btn wechat" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">
+            <i class="fab fa-weixin"></i>
+        </div>
+        <div class="float-btn phone">
+            <i class="fas fa-phone"></i>
+        </div>
+    </div>
+
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('mainHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // 产品分类筛选
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                // 为当前标签添加active类
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                const products = document.querySelectorAll('.product-card');
+                
+                products.forEach(product => {
+                    if (category === 'all' || product.getAttribute('data-category') === category) {
+                        product.style.display = 'block';
+                        setTimeout(() => {
+                            product.style.opacity = '1';
+                            product.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+                        }, 100);
+                    } else {
+                        product.style.opacity = '0';
+                        product.style.transform = 'translateY(20px) rotateX(5deg) rotateY(5deg)';
+                        setTimeout(() => {
+                            product.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 卡片动画效果
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // 初始化动画
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化产品卡片
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(30px) rotateX(5deg) rotateY(5deg)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+            
+            // 添加鼠标跟随效果
+            document.addEventListener('mousemove', function(e) {
+                const cards = document.querySelectorAll('.product-card');
+                cards.forEach(card => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateY = (x - centerX) / 25;
+                    const rotateX = (centerY - y) / 25;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+            });
+            
+            // 初始化特征卡片动画
+            const features = document.querySelectorAll('.feature-item');
+            features.forEach(feature => {
+                setTimeout(() => {
+                    feature.style.opacity = '1';
+                    feature.style.transform = 'translateY(0)';
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
